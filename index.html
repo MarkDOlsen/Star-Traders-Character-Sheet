@@ -96,7 +96,7 @@
             border-color: #0284c7;
         }
         .checkbox-custom:checked::after {
-            content: '?';
+            content: 'X';
             color: white;
             font-size: 14px;
             font-weight: bold;
@@ -173,7 +173,7 @@
                         <div class="flex gap-6">
                             <div>
                                 <label class="text-[10px] font-bold uppercase text-slate-500 block">Refresh</label>
-                                <input type="number" id="refresh" value="3" class="text-sm font-bold text-center w-12">
+                                <input type="number" id="refresh" value="6" class="text-sm font-bold text-center w-12">
                             </div>
                             <div>
                                 <label class="text-[10px] font-bold uppercase text-slate-500 block">FP</label>
@@ -472,7 +472,7 @@
                 } else if (el.type === 'number') {
                     // Restore intended defaults
                     if (el.id === 'refresh' || el.id === 'fatePoints') {
-                        el.value = 3;
+                        el.value = 6;
                     } else {
                         el.value = '';
                     }

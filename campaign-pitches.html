@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Campaign Pitches</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --panel-alt: #1f2937;
+      --text: #f3f4f6;
+      --muted: #cbd5e1;
+      --accent: #38bdf8;
+      --accent-hover: #0ea5e9;
+      --border: #334155;
+      --shadow: rgba(0, 0, 0, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #0b1120 0%, #111827 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 20px 60px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: 2.5rem;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      margin: 0 auto;
+      max-width: 800px;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .top-links {
+      margin-top: 22px;
+    }
+
+    .campaign-section {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 28px;
+      align-items: start;
+      background: rgba(17, 24, 39, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px;
+      margin-bottom: 32px;
+      box-shadow: 0 12px 30px var(--shadow);
+    }
+
+    .campaign-logo {
+      width: 100%;
+      max-width: 200px;
+      border-radius: 14px;
+      display: block;
+      border: 1px solid var(--border);
+      background: #0b1220;
+    }
+
+    .campaign-content h2 {
+      margin-top: 0;
+      margin-bottom: 8px;
+      font-size: 1.9rem;
+    }
+
+    .tagline {
+      margin: 0 0 16px;
+      color: var(--accent);
+      font-size: 1.05rem;
+      font-weight: bold;
+      letter-spacing: 0.02em;
+    }
+
+    .description {
+      color: var(--muted);
+      margin-bottom: 22px;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 12px 18px;
+      background: var(--accent);
+      color: #082032;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 10px;
+      transition: background 0.2s ease, transform 0.15s ease;
+    }
+
+    .button:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+
+    @media (max-width: 760px) {
+      .campaign-section {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .campaign-logo {
+        margin: 0 auto;
+      }
+
+      .button-row {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Campaign Pitches</h1>
+      <p class="subtitle">
+        A collection of short campaign overviews for my favorite Fate-based home-brew settings.
+        Each includes a brief pitch and a link to a longer player-facing campaign intro.
+      </p>
+      <div class="top-links button-row" style="justify-content: center;">
+        <a class="button" href="index.html">Back to Main Page</a>
+      </div>
+    </header>
+
+    <section class="campaign-section">
+      <img
+        src="Delvers-ICON.jpg"
+        alt="Delvers campaign logo"
+        class="campaign-logo"
+      />
+      <div class="campaign-content">
+        <h2>Delvers</h2>
+        <p class="tagline">Massacre monsters, take their stuff!</p>
+        <div class="description">
+          <p>
+            <strong>Delvers</strong> is a high-octane, episodic hack-and-slash fantasy campaign
+            that strips away complex politics and deep lore to focus on action, danger, and loot.
+            Players are professional adventurers who descend into sprawling, monster-infested
+            megadungeons to defeat deadly foes and haul out as much treasure as possible.
+          </p>
+          <p>
+            Expect brutal combat, dangerous traps, careful inventory management, and the thrill of
+            uncovering wildly overpowered magical gear as you carve a path through one lethal
+            challenge after another in pursuit of fame and fortune.
+          </p>
+        </div>
+        <div class="button-row">
+          <a class="button" href="https://drive.google.com/file/d/14ksgujb-6_y12RsdpKyGsKnilJ8z99XZ/view?usp=drive_link" target="_blank" rel="noopener noreferrer">
+            Full Player Intro
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="campaign-section">
+      <img
+        src="Earthdawn-ICON.jpg"
+        alt="Earthdawn, Fate of Barsaive campaign logo"
+        class="campaign-logo"
+      />
+      <div class="campaign-content">
+        <h2>Earthdawn, Fate of Barsaive</h2>
+        <p class="tagline">Magic returned. The world survived. Barely.</p>
+        <div class="description">
+          <p>
+            A Fate hack of <strong>Earthdawn</strong>, this is a high-fantasy, post-apocalyptic
+            adventure set in Barsaive, centuries after the magical cataclysm known as
+            <strong>The Scourge</strong> forced civilization underground into protective citadels
+            called <strong>Kaers</strong>.
+          </p>
+          <p>
+            Now the great races—Humans, Trolls, Dwarfs, T’skrang, and others—emerge as
+            <strong>Adepts</strong>, heroes who channel raw magic into every Discipline, from
+            swordplay to sorcery. Players will brave lost Kaers, recover thread-linked magical
+            artifacts and forgotten lore, and fight for the future of Barsaive against the iron
+            grip of the Theran Empire.
+          </p>
+        </div>
+        <div class="button-row">
+          <a class="button" href="https://drive.google.com/file/d/1aIm4Ujhjn1OWMmNqAJ_lNXmVjw4-TIgW/view?usp=drive_link" target="_blank" rel="noopener noreferrer">
+            Full Player Intro
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="campaign-section">
+      <img
+        src="Swanharbor-ICON.jpg"
+        alt="Fate of Swanharbor campaign logo"
+        class="campaign-logo"
+      />
+      <div class="campaign-content">
+        <h2>Fate of Swanharbor</h2>
+        <p class="tagline">Stand at the edge of civilization.</p>
+        <div class="description">
+          <p>
+            <strong>Fate of Swanharbor</strong> is a grounded, classic fantasy setting rooted in
+            the small coastal town of Swanharbor, the first line of defense against the dangers of
+            the vast, abandoned interior.
+          </p>
+          <p>
+            The campaign centers on everyday survival in a world of fragile civilization, local
+            intrigue, ancient secrets left behind by the fallen Old Elven Empire of Nimduin, and
+            the constant need to protect the community from magical threats, ghosts, and wilderness
+            terrors lurking just beyond the town’s borders.
+          </p>
+        </div>
+        <div class="button-row">
+          <a class="button" href="https://drive.google.com/file/d/1WMuOQmxVBFzuqKc-4OEXjCeZ_MQW23S-/view?usp=drive_link" target="_blank" rel="noopener noreferrer">
+            Full Player Intro
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="campaign-section">
+      <img
+        src="Olympus-ICON.jpg"
+        alt="Heirs of Olympus campaign logo"
+        class="campaign-logo"
+      />
+      <div class="campaign-content">
+        <h2>Heirs of Olympus</h2>
+        <p class="tagline">Godhood is a mess. Welcome to the family.</p>
+        <div class="description">
+          <p>
+            <strong>Heirs of Olympus</strong> is a modern urban fantasy divine telenovela where
+            players become newly awakened deities, chosen by the returning Divine Spark of the
+            ancient gods, while still trying to survive ordinary life in modern Chicago.
+          </p>
+          <p>
+            This campaign thrives on high-stakes melodrama—rivalries, betrayals, love triangles,
+            family complications, and mythic power struggles—as characters learn to control their
+            reality-bending divine gifts while balancing godhood with rent, work, and the need to
+            hide their true nature from the mortal world.
+          </p>
+        </div>
+        <div class="button-row">
+          <a class="button" href="https://drive.google.com/file/d/1VqaOUQCLzPeFPdFHCZQ7CgLwB7qBjZnL/view?usp=drive_link" target="_blank" rel="noopener noreferrer">
+            Full Player Intro
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="campaign-section">
+      <img
+        src="Sea-ICON.jpg"
+        alt="The Infinite Sea campaign logo"
+        class="campaign-logo"
+      />
+      <div class="campaign-content">
+        <h2>The Infinite Sea</h2>
+        <p class="tagline">Gold, glory, and piracy on the high seas.</p>
+        <div class="description">
+          <p>
+            <strong>The Infinite Sea</strong> is a mythic pirate adventure set on a flat world of
+            eternal water, blending the romantic grit of the Age of Sail with active mythology and
+            magic. Players are part of a ship’s crew, chasing treasure, raiding rivals, and
+            navigating the perilous waters between the Known Seas and the mysterious Outer Currents.
+          </p>
+          <p>
+            Expect swashbuckling action, strange god-touched shores, dangerous voyages, and
+            encounters with minor deities and colossal god-beasts that make every journey feel like
+            a brush with legend.
+          </p>
+        </div>
+        <div class="button-row">
+          <a class="button" href="https://drive.google.com/file/d/1V27B2O5JtBWVUiFKiPE6JXYSTs1sGLF9/view?usp=drive_link" target="_blank" rel="noopener noreferrer">
+            Full Player Intro
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="campaign-section">
+      <img
+        src="Star-Traders-ICON.jpg"
+        alt="Star Traders campaign logo"
+        class="campaign-logo"
+      />
+      <div class="campaign-content">
+        <h2>Star Traders</h2>
+        <p class="tagline">Keep your blasters ready and the engine running.</p>
+        <div class="description">
+          <p>
+            <strong>Star Traders</strong> is a classic science fantasy space opera set in
+            <strong>The Fringe</strong>, the lawless outer frontier of the galaxy, where players
+            are smugglers, freebooters, and daring adventurers piloting a beloved but barely
+            functional starship.
+          </p>
+          <p>
+            The campaign focuses on pulp-style action, moral gray areas, high-stakes smuggling and
+            trade runs, exotic alien species, espionage, and double-crosses as the crew tries to
+            pay their debts and strike it rich before bad luck or major factions finally catch up
+            to them.
+          </p>
+        </div>
+        <div class="button-row">
+          <a class="button" href="https://drive.google.com/file/d/1Mc4Qa9OjGOpZv38_UIV5lgKn-pQYRgtM/view?usp=drive_link" target="_blank" rel="noopener noreferrer">
+            Full Player Intro
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

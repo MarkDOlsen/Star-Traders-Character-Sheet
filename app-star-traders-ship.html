@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Star Traders Ship Record Sheet</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@400;600;700&display=swap');
+
+        .header-font { font-family: 'Orbitron', sans-serif; letter-spacing: 0.05em; }
+        body { font-family: 'Rajdhani', sans-serif; background-color: #0f172a; color: #f1f5f9; margin: 0; padding: 0; }
+
+        .page-wrapper {
+            width: 800px;
+            margin: 20px auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .sheet-container {
+            background: #ffffff;
+            color: #1e293b;
+            padding: 25px 35px;
+            position: relative;
+            width: 800px;
+            height: 1050px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        input, select, textarea {
+            border-bottom: 1px solid #cbd5e1;
+            width: 100%;
+            transition: all 0.2s;
+            background: transparent;
+            padding: 1px 4px;
+        }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #0ea5e9; background-color: #f0f9ff; }
+
+        textarea {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.375rem;
+            background-color: #f8fafc;
+            resize: none;
+            padding: 0.5rem 0.75rem;
+        }
+
+        .rich-editor {
+            border: 1px solid #e2e8f0;
+            background-color: #f8fafc;
+            padding: 0.75rem;
+            border-radius: 0.375rem;
+            outline: none;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+        .rich-editor ul { list-style-type: disc; padding-left: 1.5rem; }
+
+        .checkbox-custom {
+            width: 1.1rem;
+            height: 1.1rem;
+            cursor: pointer;
+            border: 2px solid #334155;
+            border-radius: 4px;
+            appearance: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            flex-shrink: 0;
+        }
+        .checkbox-custom:checked { background-color: #0ea5e9; border-color: #0284c7; }
+        .checkbox-custom:checked::after { content: 'X'; color: white; font-size: 11px; font-weight: bold; }
+
+        .condition-label { font-size: 0.75rem; font-weight: 700; color: #0f172a; text-transform: uppercase; }
+        .small-label { font-size: 9px; font-weight: 700; text-transform: uppercase; color: #94a3b8; display: block; }
+        .stat-box {
+            border: 1px solid #cbd5e1;
+            border-radius: 0.375rem;
+            background: #f8fafc;
+            padding: 0.35rem 0.5rem;
+        }
+        .readonly-stat {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #0f172a;
+            text-align: center;
+            border-bottom: none;
+            background: transparent;
+            padding: 0;
+        }
+        .reference-text p { margin-bottom: 0.5rem; }
+        .reference-text ol { margin-left: 1.2rem; }
+        .reference-text ul { list-style-type: disc; margin-left: 1.2rem; }
+
+        @media print {
+            body { background: white; }
+            .no-print { display: none; }
+            .page-wrapper { margin: 0; width: 800px; gap: 0; }
+            .sheet-container { box-shadow: none; border: none; margin: 0; page-break-after: always; }
+        }
+
+        .pdf-mode { margin: 0 !important; padding: 0 !important; width: 800px !important; }
+    </style>
+</head>
+<body>
+
+    <div class="no-print sticky top-0 z-50 bg-slate-900 border-b border-slate-700 p-4 flex flex-col items-center gap-3 shadow-xl">
+        <div class="flex justify-center gap-4 flex-wrap">
+            <button onclick="exportJSON()" class="flex items-center gap-2 bg-sky-600 text-white px-4 py-2 rounded hover:bg-sky-700 transition">
+                <i data-lucide="download"></i> Save
+            </button>
+            <label class="flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700 cursor-pointer transition">
+                <i data-lucide="upload"></i> Load
+                <input type="file" id="importFile" class="hidden" onchange="importJSON(event)">
+            </label>
+            <button onclick="generatePDF()" class="flex items-center gap-2 bg-slate-100 text-slate-900 px-4 py-2 rounded hover:bg-white transition">
+                <i data-lucide="file-text"></i> PDF
+            </button>
+            <button onclick="resetForm()" class="flex items-center gap-2 bg-rose-600 text-white px-4 py-2 rounded hover:bg-rose-700 transition">
+                <i data-lucide="trash-2"></i> Reset
+            </button>
+        </div>
+        <div class="flex items-center gap-2 bg-slate-800 p-1 rounded border border-slate-600">
+            <button onclick="execCmd('bold')" class="p-1 hover:bg-slate-700 rounded text-slate-200" title="Bold"><i data-lucide="bold" class="w-4 h-4"></i></button>
+            <button onclick="execCmd('italic')" class="p-1 hover:bg-slate-700 rounded text-slate-200" title="Italic"><i data-lucide="italic" class="w-4 h-4"></i></button>
+            <button onclick="execCmd('insertUnorderedList')" class="p-1 hover:bg-slate-700 rounded text-slate-200" title="Bullets"><i data-lucide="list" class="w-4 h-4"></i></button>
+            <button onclick="execCmd('removeFormat')" class="p-1 hover:bg-slate-700 rounded text-slate-200" title="Clear Formatting"><i data-lucide="eraser" class="w-4 h-4"></i></button>
+        </div>
+    </div>
+
+    <div id="pdf-content" class="page-wrapper">
+        <div class="sheet-container">
+            <div class="flex justify-between items-start mb-3 gap-6">
+                <div class="w-2/3">
+                    <h1 class="header-font text-4xl text-sky-700 mb-2 uppercase italic leading-none">Star Traders</h1>
+                    <div class="grid grid-cols-2 gap-x-6 gap-y-1">
+                        <div class="col-span-2">
+                            <label class="small-label">Ship Name</label>
+                            <input type="text" id="shipName" class="text-xl font-bold border-b-2 border-slate-300">
+                        </div>
+                        <div>
+                            <label class="small-label">Make / Model</label>
+                            <input type="text" id="makeModel" class="text-sm">
+                        </div>
+                        <div>
+                            <label class="small-label">Size</label>
+                            <select id="shipSize" class="text-sm" onchange="updateShipDerivedUI()">
+                                <option value="Small">Small</option>
+                                <option value="Medium">Medium</option>
+                                <option value="Large">Large</option>
+                                <option value="Huge">Huge</option>
+                                <option value="Titanic">Titanic</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-1/3 flex flex-col items-end">
+                    <div class="w-28 h-32 border-4 border-slate-800 rounded bg-slate-50 flex items-center justify-center relative overflow-hidden">
+                        <img id="profile-img" src="" class="hidden w-full h-full object-cover">
+                        <div id="img-placeholder" class="text-slate-300 flex flex-col items-center text-center p-2">
+                            <i data-lucide="rocket" class="w-8 h-8"></i>
+                            <span class="text-[8px] uppercase font-bold">Ship Image</span>
+                        </div>
+                        <input type="file" id="imgInput" class="absolute inset-0 opacity-0 cursor-pointer no-print" onchange="handleImage(this)">
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h2 class="header-font text-sm bg-slate-900 text-white px-3 py-1 mb-2 uppercase italic">Ship Aspects</h2>
+                <div class="grid grid-cols-1 gap-y-1">
+                    <div class="flex items-center gap-4"><label class="font-bold text-[10px] text-slate-500 w-20 shrink-0 uppercase">Aspect</label><input type="text" id="aspect1" class="text-sm"></div>
+                    <div class="flex items-center gap-4"><label class="font-bold text-[10px] text-slate-500 w-20 shrink-0 uppercase">Aspect</label><input type="text" id="aspect2" class="text-sm"></div>
+                    <div class="flex items-center gap-4"><label class="font-bold text-[10px] text-slate-500 w-20 shrink-0 uppercase">Aspect</label><input type="text" id="aspect3" class="text-sm"></div>
+                    <div class="flex items-center gap-4"><label class="font-bold text-[10px] text-slate-500 w-20 shrink-0 uppercase">Aspect</label><input type="text" id="aspect4" class="text-sm"></div>
+                    <div class="flex items-center gap-4"><label class="font-bold text-[10px] text-slate-500 w-20 shrink-0 uppercase">Aspect</label><input type="text" id="aspect5" class="text-sm"></div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-6 flex-grow overflow-hidden">
+                <div class="flex flex-col gap-3">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="stat-box">
+                            <label class="small-label">Crew Fate Pool</label>
+                            <input type="number" id="crewFatePool" value="1" min="0" class="readonly-stat text-left border-b border-slate-300">
+                        </div>
+                        <div class="stat-box">
+                            <label class="small-label">Movement</label>
+                            <input type="text" id="movement" value="1 zone" readonly class="readonly-stat">
+                        </div>
+                        <div class="stat-box">
+                            <label class="small-label">Maneuverability</label>
+                            <input type="text" id="maneuverability" value="0" readonly class="readonly-stat">
+                        </div>
+                        <div class="stat-box">
+                            <label class="small-label">Effective Hull Size</label>
+                            <input type="text" id="effectiveSizeDisplay" value="Small" readonly class="readonly-stat">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <h2 class="header-font text-[11px] bg-purple-900 text-white px-2 py-0.5 mb-1 uppercase italic">Drive Systems</h2>
+                            <div class="space-y-2 border border-slate-200 rounded p-3 bg-slate-50">
+                                <div>
+                                    <label class="small-label">Engine Rating</label>
+                                    <select id="engineRating" onchange="updateShipDerivedUI()" class="text-sm">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="small-label">Jump Drive Rating</label>
+                                    <select id="jumpDriveRating" class="text-sm">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h2 class="header-font text-[11px] bg-sky-700 text-white px-2 py-0.5 mb-1 uppercase italic">Jump Drive Upgrades</h2>
+                            <div class="space-y-1.5 border border-slate-200 rounded p-3 bg-slate-50 text-[12px]">
+                                <label class="flex items-center gap-2"><input type="checkbox" class="checkbox-custom" id="jumpFaster"><span>Faster</span></label>
+                                <label class="flex items-center gap-2"><input type="checkbox" class="checkbox-custom" id="jumpEfficient"><span>Efficient</span></label>
+                                <label class="flex items-center gap-2"><input type="checkbox" class="checkbox-custom" id="jumpCapacity"><span>Capacity</span></label>
+                                <label class="flex items-center gap-2"><input type="checkbox" class="checkbox-custom" id="jumpDistance"><span>Distance</span></label>
+                                <label class="flex items-center gap-2"><input type="checkbox" class="checkbox-custom" id="jumpFuelScoop"><span>Fuel Scoop</span></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h2 class="header-font text-[11px] bg-slate-900 text-white px-2 py-0.5 mb-1 uppercase italic">Weapons</h2>
+                        <div id="weapons" contenteditable="true" class="rich-editor text-sm min-h-[260px]"></div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-2.5">
+                    <div class="bg-slate-50 px-2 py-1 border border-slate-200 rounded">
+                        <h2 class="header-font text-[10px] text-slate-900 border-b border-slate-900 mb-1 uppercase">Toughness</h2>
+                        <div class="flex gap-1 flex-wrap" id="box-toughness"></div>
+                    </div>
+
+                    <div class="bg-slate-50 px-2 py-1 border border-slate-200 rounded">
+                        <h2 class="header-font text-[10px] text-slate-900 border-b border-slate-900 mb-1 uppercase">Conditions</h2>
+                        <div class="space-y-1" id="conditions-list"></div>
+                    </div>
+
+                    <div class="bg-slate-50 px-2 py-1 border border-slate-200 rounded">
+                        <h2 class="header-font text-[10px] text-slate-900 border-b border-slate-900 mb-1 uppercase">Shields & Armor</h2>
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between items-center gap-2">
+                                <div class="flex items-center gap-2 grow"><span class="condition-label">Shields</span>
+                                    <select id="shieldLevel" onchange="updateDefenseUI()" class="text-[11px] font-bold border-none max-w-[96px]">
+                                        <option value="Default">Default</option>
+                                        <option value="Light">Light</option>
+                                        <option value="Medium">Medium</option>
+                                        <option value="Heavy">Heavy</option>
+                                    </select>
+                                </div>
+                                <div class="flex gap-1" id="box-shield"></div>
+                            </div>
+                            <div class="flex justify-between items-center gap-2 pt-0.5 border-t border-slate-200">
+                                <div class="flex items-center gap-2 grow"><span class="condition-label">Armor</span>
+                                    <select id="armorLevel" onchange="updateDefenseUI()" class="text-[11px] font-bold border-none max-w-[96px]">
+                                        <option value="Default">Default</option>
+                                        <option value="Light">Light</option>
+                                        <option value="Medium">Medium</option>
+                                        <option value="Heavy">Heavy</option>
+                                    </select>
+                                </div>
+                                <div class="text-[9px] font-black bg-slate-800 text-white px-1.5 py-0.5 rounded" id="armorLabel">Default</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex-grow">
+                        <h2 class="header-font text-[11px] bg-red-700 text-white px-2 py-0.5 mb-1 uppercase italic">Consequences</h2>
+                        <div class="space-y-1">
+                            <div><label class="text-[8px] font-bold uppercase text-slate-400 block leading-none">Mild (2)</label><input type="text" id="mildConsequence" class="text-sm py-0"></div>
+                            <div id="extra-mild-container" class="space-y-1"></div>
+                            <div><label class="text-[8px] font-bold uppercase text-slate-400 block leading-none mt-0.5">Moderate (4)</label><input type="text" id="modConsequence" class="text-sm py-0"></div>
+                            <div id="extra-mod-container" class="space-y-1"></div>
+                            <div><label class="text-[8px] font-bold uppercase text-slate-400 block leading-none mt-0.5">Severe (6)</label><input type="text" id="sevConsequence" class="text-sm py-0"></div>
+                            <div id="extra-sev-container" class="space-y-1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sheet-container">
+            <h1 class="header-font text-2xl text-sky-700 uppercase italic border-b-2 border-slate-900 pb-1 mb-4">Upgrades</h1>
+            <div class="grid grid-cols-2 gap-5 flex-grow overflow-hidden">
+                <div class="space-y-4">
+                    <div class="border border-slate-200 rounded p-4 bg-slate-50">
+                        <h2 class="header-font text-xs bg-slate-900 text-white px-2 py-1 mb-3 uppercase">Installed Upgrades</h2>
+                        <div class="space-y-3 text-sm">
+                            <div>
+                                <label class="flex items-start gap-2"><input type="checkbox" class="checkbox-custom mt-1" id="upgradeAgility" onchange="updateShipDerivedUI()"><span><strong>Agility</strong> = Improved Maneuverability</span></label>
+                            </div>
+                            <div>
+                                <label class="flex items-start gap-2"><input type="checkbox" class="checkbox-custom mt-1" id="upgradeHeavyHullPlating" onchange="updateShipDerivedUI()"><span><strong>Heavy Hull Plating</strong> = Improved Damage Resistance</span></label>
+                            </div>
+                            <div>
+                                <label class="flex items-start gap-2"><input type="checkbox" class="checkbox-custom mt-1" id="upgradePowerBoost"><span><strong>Power Boost</strong> = Once per session spend a crew FP to move an additional zone or to create an aspect with two free invokes related to a massive increase in speed</span></label>
+                            </div>
+                            <div>
+                                <label class="flex items-start gap-2"><input type="checkbox" class="checkbox-custom mt-1" id="upgradeSensorJammer"><span><strong>Sensor Jammer</strong> = Once per session spend a crew fate point to engage the jammer</span></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border border-slate-200 rounded p-4 bg-slate-50 flex flex-col flex-grow">
+                        <h2 class="header-font text-xs bg-slate-900 text-white px-2 py-1 mb-3 uppercase">Additional Upgrades</h2>
+                        <div id="additionalUpgrades" contenteditable="true" class="rich-editor text-sm flex-grow min-h-[420px]"></div>
+                    </div>
+                </div>
+
+                <div class="space-y-4 flex flex-col">
+                    <div class="border border-slate-200 rounded p-4 bg-slate-50">
+                        <h2 class="header-font text-xs bg-slate-900 text-white px-2 py-1 mb-3 uppercase">System Upgrade Lines</h2>
+                        <p class="text-sm mb-2"><strong>System Upgrade</strong> = +1 to specific listed action</p>
+                        <div class="space-y-2">
+                            <div><label class="small-label">System Upgrade 1</label><input type="text" id="systemUpgrade1" class="text-sm"></div>
+                            <div><label class="small-label">System Upgrade 2</label><input type="text" id="systemUpgrade2" class="text-sm"></div>
+                            <div><label class="small-label">System Upgrade 3</label><input type="text" id="systemUpgrade3" class="text-sm"></div>
+                            <div><label class="small-label">System Upgrade 4</label><input type="text" id="systemUpgrade4" class="text-sm"></div>
+                            <div><label class="small-label">System Upgrade 5</label><input type="text" id="systemUpgrade5" class="text-sm"></div>
+                        </div>
+                    </div>
+
+                    <div class="border border-slate-200 rounded p-4 bg-slate-50 flex flex-col flex-grow">
+                        <h2 class="header-font text-xs bg-slate-900 text-white px-2 py-1 mb-3 uppercase">Other Notes</h2>
+                        <div id="upgradeNotes" contenteditable="true" class="rich-editor text-sm flex-grow min-h-[420px]"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sheet-container">
+            <h1 class="header-font text-2xl text-sky-700 uppercase italic border-b-2 border-slate-900 pb-1 mb-4">Quick Reference</h1>
+            <div class="reference-text text-[14px] leading-snug overflow-hidden">
+                <h2 class="header-font text-xs bg-slate-900 text-white px-2 py-1 mb-2 uppercase">Shipâ€™s Sensors</h2>
+                <p>A ship sensor's can gather basic information about anything not blocked by a planet, star, stealth systems, or interfering stellar phenomena, within the system it is in without needing a check.</p>
+                <p>This includes things like: number, location, and size of planets; basic planetary atmosphere of each planet; presence of active beacons; presence and intensity of ship to ship or ship to planet communications; number, location (as a point source only), speed and heading of any other ships in the system.</p>
+                <p>Gathering more detailed information requires a Systems check with a base difficulty depending on the type of information the person at the sensors is trying to gather, with a +1 per transit zone between the ship and anything it is trying to gather information on.</p>
+
+                <h2 class="header-font text-xs bg-slate-900 text-white px-2 py-1 mb-2 mt-4 uppercase">Ship Combat</h2>
+                <p class="font-bold uppercase">Ship combat happens in phases. In each phase one person takes one of the listed actions.</p>
+                <ol class="list-decimal space-y-2">
+                    <li><strong>Command Phase (Captain)</strong><br>
+                        <strong>Initiative.</strong> At the start of the exchange, roll Notice or Systems for initiative.<br>
+                        <strong>Command Presence.</strong> Make Command or Rapport checks to create advantages around giving the crew orders, leadership, and moral boosts. The captain can assist with, or make, checks with Systems or Piloting instead of creating advantages.
+                    </li>
+                    <li><strong>Piloting Phase (Pilot)</strong><br>
+                        <strong>Evade.</strong> Ships can take evasive maneuvers at the cost of 1 zone of movement. The pilot makes a Pilot roll and that is defense against any incoming attacks that exchange. If a pilot does not take evasive maneuvers in an exchange then their ship has a passive resistance of +0 against attacks that exchange.<br>
+                        <strong>Maneuver.</strong> Move 1 zone per exchange (2 for Engine 2 or higher). The pilot can attempt a Pilot roll to move more zones (+4 for one additional zone, +6 for two additional zones). Ships can change their facing as part of their movement, up to 45 degrees at the cost of 1 zone of movement.
+                    </li>
+                    <li><strong>Guns Phase (Gunner Stations)</strong><br>
+                        <strong>Fire Weapons!</strong> Each weapon a ship has requires a gunner. Gunners pick their targets and roll Shoot. Beam weapons hit their target immediately. Missile weapons hit their target at the start of the next exchange.
+                    </li>
+                    <li><strong>EW Phase (Coms/Security Station)</strong><br>
+                        <strong>Countermeasures.</strong> Someone sitting at the electronics station may make Systems checks to create advantages that can be used in following phases to reduce the chance of weapons hitting.<br>
+                        <strong>EW Warfare.</strong> The systems person can attempt to connect to the enemyâ€™s ship and damage or take control of systems using Systems and makes checks to defend against similar attacks from enemy ships. This is an opposed roll against the Systems skill of the coms or security officer on the other ship.<br>
+                        <strong>Manage Coms.</strong> Sending and receiving communications is a free action.
+                    </li>
+                    <li><strong>Engineering Phase (Engineering)</strong><br>
+                        <strong>Damage Control.</strong> The shipâ€™s engineer can make an Engineering check to perform quick repairs to damaged systems or can make Systems checks.<br>
+                        <strong>Give Er All Sheâ€™s Got.</strong> Make Engineering or Science checks to create advantages to get more out of engines, shields, or weapons.
+                    </li>
+                </ol>
+
+                <h2 class="header-font text-xs bg-slate-900 text-white px-2 py-1 mb-2 mt-4 uppercase">Emergency Ship Repairs</h2>
+                <p>During missions, starships often sustain damage. While permanent repairs can be made with an Engineering roll and spare parts (which cost credits), engineers can perform temporary repairs during combat to keep the ship operational.</p>
+                <p>These temporary fixes create a <strong>TEMPORARY REPAIRS</strong> aspect, which the GM can compel for free once per subsequent fight until proper repairs are completed.</p>
+                <p>To make repairs mid-combat, an engineer must use their action to make an Engineering roll against the damaged condition's difficulty. A success clears one stress box on that condition; a success with style clears both.</p>
+                <p>Engineering can also stabilize disastrous consequences (like a <strong>HULL BREACH</strong>) to prevent them from being compelled during the current conflict. Stabilizing a mild consequence requires a Fair (+2) Engineering roll, a moderate consequence requires a Great (+4) roll, and a severe consequence requires a Fantastic (+6) roll.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const sizeOrder = ["Small", "Medium", "Large", "Huge", "Titanic"];
+        const sizeStats = {
+            Small:   { maneuver: 0, toughness: 2, conditions: ["Crippled"] },
+            Medium:  { maneuver: -1, toughness: 4, conditions: ["Crippled", "Disabled"] },
+            Large:   { maneuver: -2, toughness: 6, conditions: ["Crippled", "Disabled", "Damaged"] },
+            Huge:    { maneuver: -3, toughness: 8, conditions: ["Crippled", "Disabled", "Damaged", "Impaired"] },
+            Titanic: { maneuver: -4, toughness: 10, conditions: ["Crippled", "Disabled", "Damaged", "Impaired", "Scratched"] }
+        };
+
+        const engineStats = {
+            1: { movement: "1 zone", maneuverBonus: 0 },
+            2: { movement: "2 zones", maneuverBonus: 0 },
+            3: { movement: "2 zones", maneuverBonus: 1 },
+            4: { movement: "2 zones", maneuverBonus: 2 }
+        };
+
+        function execCmd(command) {
+            document.execCommand(command, false, null);
+        }
+
+        function escapeAttr(value) {
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/"/g, '&quot;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+
+        function getEffectiveSize() {
+            const baseSize = document.getElementById('shipSize').value || 'Small';
+            const hullPlating = document.getElementById('upgradeHeavyHullPlating').checked;
+            const idx = sizeOrder.indexOf(baseSize);
+            return hullPlating ? sizeOrder[Math.min(idx + 1, sizeOrder.length - 1)] : baseSize;
+        }
+
+        function renderBoxes(id, type, count) {
+            const el = document.getElementById(id);
+            const saved = Array.from(el.querySelectorAll('input')).map(i => i.checked);
+            el.innerHTML = '';
+            for (let i = 0; i < count; i++) {
+                const cb = document.createElement('input');
+                cb.type = 'checkbox';
+                cb.className = 'checkbox-custom';
+                cb.id = `track_${type}_${i}`;
+                if (saved[i]) cb.checked = true;
+                el.appendChild(cb);
+            }
+        }
+
+        function renderConditionRows(conditionNames) {
+            const container = document.getElementById('conditions-list');
+            const priorState = {};
+            container.querySelectorAll('[data-condition-name]').forEach(row => {
+                const name = row.getAttribute('data-condition-name');
+                priorState[name] = Array.from(row.querySelectorAll('input')).map(i => i.checked);
+            });
+
+            container.innerHTML = '';
+            conditionNames.forEach((name, idx) => {
+                const row = document.createElement('div');
+                row.className = idx > 0 ? 'flex justify-between items-center pt-0.5 border-t border-slate-200' : 'flex justify-between items-center';
+                row.setAttribute('data-condition-name', name);
+                row.innerHTML = `<span class="condition-label">${name}</span><div class="flex gap-1" id="condRow_${name}"></div>`;
+                container.appendChild(row);
+
+                const target = row.querySelector(`#condRow_${CSS.escape(name)}`);
+                const states = priorState[name] || [];
+                for (let i = 0; i < 2; i++) {
+                    const cb = document.createElement('input');
+                    cb.type = 'checkbox';
+                    cb.className = 'checkbox-custom';
+                    cb.id = `cond_${name}_${i}`;
+                    if (states[i]) cb.checked = true;
+                    target.appendChild(cb);
+                }
+            });
+        }
+
+        function updateDefenseUI() {
+            const shieldMap = { Default: 0, Light: 2, Medium: 3, Heavy: 4 };
+            const armorMap = { Default: 0, Light: 1, Medium: 2, Heavy: 3 };
+
+            const shieldLevel = document.getElementById('shieldLevel').value || 'Default';
+            const armorLevel = document.getElementById('armorLevel').value || 'Default';
+            renderBoxes('box-shield', 'shield', shieldMap[shieldLevel] || 0);
+            document.getElementById('armorLabel').innerText = armorLevel;
+
+            const mild2Val = document.getElementById('mildConsequence2')?.value || '';
+            const mod2Val = document.getElementById('modConsequence2')?.value || '';
+            const sev2Val = document.getElementById('sevConsequence2')?.value || '';
+
+            const row = (id, label, value) => `<div><label class="text-[8px] font-bold uppercase text-sky-600 block leading-none">${label}</label><input type="text" id="${id}" class="text-sm py-0" value="${escapeAttr(value)}"></div>`;
+            const armorScore = armorMap[armorLevel] || 0;
+
+            document.getElementById('extra-mild-container').innerHTML = armorScore >= 1 ? row('mildConsequence2', 'Armor Mild (2)', mild2Val) : '';
+            document.getElementById('extra-mod-container').innerHTML = armorScore >= 2 ? row('modConsequence2', 'Armor Moderate (4)', mod2Val) : '';
+            document.getElementById('extra-sev-container').innerHTML = armorScore >= 3 ? row('sevConsequence2', 'Armor Severe (6)', sev2Val) : '';
+        }
+
+        function updateShipDerivedUI() {
+            const baseSize = document.getElementById('shipSize').value || 'Small';
+            const effectiveSize = getEffectiveSize();
+            const engine = parseInt(document.getElementById('engineRating').value || '1', 10);
+            const agility = document.getElementById('upgradeAgility').checked ? 1 : 0;
+
+            const baseManeuver = sizeStats[baseSize].maneuver;
+            const maneuver = baseManeuver + (engineStats[engine]?.maneuverBonus || 0) + agility;
+            document.getElementById('maneuverability').value = maneuver >= 0 ? `+${maneuver}` : `${maneuver}`;
+            document.getElementById('movement').value = engineStats[engine]?.movement || '1 zone';
+            document.getElementById('effectiveSizeDisplay').value = effectiveSize;
+
+            renderBoxes('box-toughness', 'toughness', sizeStats[effectiveSize].toughness);
+            renderConditionRows(sizeStats[effectiveSize].conditions);
+        }
+
+        function handleImage(input) {
+            if (input.files?.[0]) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    document.getElementById('profile-img').src = e.target.result;
+                    document.getElementById('profile-img').classList.remove('hidden');
+                    document.getElementById('img-placeholder').classList.add('hidden');
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        async function generatePDF() {
+            const element = document.getElementById('pdf-content');
+            const name = document.getElementById('shipName').value || 'Ship_Record';
+            window.scrollTo(0, 0);
+            element.classList.add('pdf-mode');
+            const opt = {
+                margin: 0,
+                filename: `${name}_Sheet.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            try {
+                await html2pdf().set(opt).from(element).save();
+            } finally {
+                element.classList.remove('pdf-mode');
+            }
+        }
+
+        function exportJSON() {
+            const data = {};
+
+            document.querySelectorAll('input').forEach(el => {
+                if (el.id) {
+                    if (el.type === 'checkbox') data[el.id] = el.checked;
+                    else if (el.type !== 'file') data[el.id] = el.value;
+                }
+            });
+
+            document.querySelectorAll('select').forEach(el => {
+                if (el.id) data[el.id] = el.value;
+            });
+
+            document.querySelectorAll('textarea').forEach(el => {
+                if (el.id) data[el.id] = el.value;
+            });
+
+            document.querySelectorAll('.rich-editor').forEach(el => {
+                if (el.id) data[el.id] = el.innerHTML;
+            });
+
+            ['toughness', 'shield'].forEach(type => {
+                data[`dynamic_boxes_${type}`] = Array.from(document.querySelectorAll(`[id^="track_${type}_"]`)).map(box => box.checked);
+            });
+
+            data.dynamic_condition_rows = {};
+            document.querySelectorAll('#conditions-list [data-condition-name]').forEach(row => {
+                const name = row.getAttribute('data-condition-name');
+                data.dynamic_condition_rows[name] = Array.from(row.querySelectorAll('input')).map(box => box.checked);
+            });
+
+            const profileImg = document.getElementById('profile-img');
+            data.profileImgSrc = profileImg && profileImg.src ? profileImg.src : "";
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'StarTraders_ShipRecord.json';
+            a.click();
+        }
+
+        function importJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = e => {
+                const data = JSON.parse(e.target.result);
+
+                const applyDataToExistingElements = () => {
+                    for (const key in data) {
+                        const el = document.getElementById(key);
+                        if (el) {
+                            if (el.type === 'checkbox') el.checked = data[key];
+                            else if (el.classList.contains('rich-editor')) el.innerHTML = data[key];
+                            else el.value = data[key];
+                        }
+                    }
+                };
+
+                applyDataToExistingElements();
+                updateShipDerivedUI();
+                updateDefenseUI();
+                applyDataToExistingElements();
+
+                (data.dynamic_boxes_toughness || []).forEach((checked, i) => {
+                    const box = document.getElementById(`track_toughness_${i}`);
+                    if (box) box.checked = checked;
+                });
+
+                (data.dynamic_boxes_shield || []).forEach((checked, i) => {
+                    const box = document.getElementById(`track_shield_${i}`);
+                    if (box) box.checked = checked;
+                });
+
+                const conditionRows = data.dynamic_condition_rows || {};
+                Object.keys(conditionRows).forEach(name => {
+                    conditionRows[name].forEach((checked, i) => {
+                        const box = document.getElementById(`cond_${name}_${i}`);
+                        if (box) box.checked = checked;
+                    });
+                });
+
+                const img = document.getElementById('profile-img');
+                const placeholder = document.getElementById('img-placeholder');
+                if (data.profileImgSrc && data.profileImgSrc.startsWith('data:image')) {
+                    img.src = data.profileImgSrc;
+                    img.classList.remove('hidden');
+                    placeholder.classList.add('hidden');
+                } else {
+                    img.src = '';
+                    img.classList.add('hidden');
+                    placeholder.classList.remove('hidden');
+                }
+
+                event.target.value = '';
+            };
+            reader.readAsText(file);
+        }
+
+        function resetForm() {
+            if (!confirm('Clear all data?')) return;
+
+            document.querySelectorAll('input').forEach(el => {
+                if (!el.id) return;
+                if (el.type === 'checkbox') el.checked = false;
+                else if (el.type === 'file') el.value = '';
+                else if (el.type === 'number') {
+                    if (el.id === 'crewFatePool') el.value = 1;
+                    else el.value = '';
+                } else if (el.readOnly) {
+                    el.value = '';
+                } else {
+                    el.value = '';
+                }
+            });
+
+            document.querySelectorAll('select').forEach(el => {
+                if (el.id === 'shipSize') el.value = 'Small';
+                else if (el.id === 'engineRating' || el.id === 'jumpDriveRating') el.value = '1';
+                else if (el.id === 'shieldLevel' || el.id === 'armorLevel') el.value = 'Default';
+                else el.selectedIndex = 0;
+            });
+
+            document.querySelectorAll('textarea').forEach(el => el.value = '');
+            document.querySelectorAll('.rich-editor').forEach(el => el.innerHTML = '');
+
+            const img = document.getElementById('profile-img');
+            const placeholder = document.getElementById('img-placeholder');
+            const imgInput = document.getElementById('imgInput');
+            if (img) {
+                img.src = '';
+                img.classList.add('hidden');
+            }
+            if (placeholder) placeholder.classList.remove('hidden');
+            if (imgInput) imgInput.value = '';
+
+            const importFile = document.getElementById('importFile');
+            if (importFile) importFile.value = '';
+
+            updateShipDerivedUI();
+            updateDefenseUI();
+
+            ['toughness', 'shield'].forEach(type => {
+                document.querySelectorAll(`[id^="track_${type}_"]`).forEach(box => box.checked = false);
+            });
+            document.querySelectorAll('#conditions-list input').forEach(box => box.checked = false);
+        }
+
+        window.onload = () => {
+            updateShipDerivedUI();
+            updateDefenseUI();
+            lucide.createIcons();
+        };
+    </script>
+</body>
+</html>

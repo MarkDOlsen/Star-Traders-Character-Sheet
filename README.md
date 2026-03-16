@@ -17,7 +17,10 @@ _For players in my Fate-based TTRPG games_
 2. Not all fields are being properly exported/imported from the DtI character sheet
 3. Add full **Doors to Infinity** campaign pitch to list
 4. Re-org file structure more cleanly (see _site-reorg_ branch)
-5. Rename the repo to something like "Mark's Fate TTRPG Tools"  
+5. Rename the repo to something like "Mark's Fate TTRPG Tools"
+6. Add Lines and Veils form
+7. Add "About your Game Master" section with my gaming history and GM style
+8. Add link to the Fate SRD for reference  
 
   
 ---  

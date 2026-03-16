@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Star Traders Character Sheet</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@400;600;700&display=swap');
+        
+        .header-font { font-family: 'Orbitron', sans-serif; letter-spacing: 0.05em; }
+        body { font-family: 'Rajdhani', sans-serif; background-color: #0f172a; color: #f1f5f9; margin: 0; padding: 0; }
+        
+        /* Main Layout */
+        .page-wrapper { 
+            width: 800px; 
+            margin: 20px auto; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 20px;
+        }
+
+        .sheet-container { 
+            background: #ffffff; 
+            color: #1e293b;
+            padding: 25px 35px; 
+            position: relative; 
+            width: 800px; 
+            height: 1050px; 
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        input, select { 
+            border-bottom: 1px solid #cbd5e1; 
+            width: 100%; 
+            transition: all 0.2s; 
+            background: transparent; 
+            padding: 1px 4px;
+        }
+        input:focus, select:focus { outline: none; border-color: #0ea5e9; background-color: #f0f9ff; }
+
+        .rich-editor {
+            border: 1px solid #e2e8f0;
+            background-color: #f8fafc;
+            padding: 0.75rem;
+            border-radius: 0.375rem;
+            outline: none;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+        .rich-editor ul { list-style-type: disc; padding-left: 1.5rem; }
+
+        .checkbox-custom { 
+            width: 1.1rem; 
+            height: 1.1rem; 
+            cursor: pointer; 
+            border: 2px solid #334155; 
+            border-radius: 4px; 
+            appearance: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            flex-shrink: 0;
+        }
+        .checkbox-custom:checked { background-color: #0ea5e9; border-color: #0284c7; }
+        .checkbox-custom:checked::after { content: 'X'; color: white; font-size: 11px; font-weight: bold; }
+
+        .condition-label { font-size: 0.75rem; font-weight: 700; color: #0f172a; text-transform: uppercase; }
+        
+        /* Print/PDF Specific Fixes */
+        @media print { 
+            body { background: white; }
+            .no-print { display: none; }
+            .page-wrapper { margin: 0; width: 800px; gap: 0; }
+            .sheet-container { box-shadow: none; border: none; margin: 0; page-break-after: always; }
+        }
+
+        .pdf-mode { margin: 0 !important; padding: 0 !important; width: 800px !important; }
+    </style>
+</head>
+<body>
+
+    <div class="no-print sticky top-0 z-50 bg-slate-900 border-b border-slate-700 p-4 flex flex-col items-center gap-3 shadow-xl">
+        <div class="flex justify-center gap-4">
+            <button onclick="exportJSON()" class="flex items-center gap-2 bg-sky-600 text-white px-4 py-2 rounded hover:bg-sky-700 transition">
+                <i data-lucide="download"></i> Save
+            </button>
+            <label class="flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700 cursor-pointer transition">
+                <i data-lucide="upload"></i> Load
+                <input type="file" id="importFile" class="hidden" onchange="importJSON(event)">
+            </label>
+            <button onclick="generatePDF()" class="flex items-center gap-2 bg-slate-100 text-slate-900 px-4 py-2 rounded hover:bg-white transition">
+                <i data-lucide="file-text"></i> PDF
+            </button>
+            <button onclick="resetForm()" class="flex items-center gap-2 bg-rose-600 text-white px-4 py-2 rounded hover:bg-rose-700 transition">
+                <i data-lucide="trash-2"></i> Reset
+            </button>
+        </div>
+        <div class="flex items-center gap-2 bg-slate-800 p-1 rounded border border-slate-600">
+            <button onclick="execCmd('bold')" class="p-1 hover:bg-slate-700 rounded text-slate-200" title="Bold"><i data-lucide="bold" class="w-4 h-4"></i></button>
+            <button onclick="execCmd('italic')" class="p-1 hover:bg-slate-700 rounded text-slate-200" title="Italic"><i data-lucide="italic" class="w-4 h-4"></i></button>
+            <button onclick="execCmd('insertUnorderedList')" class="p-1 hover:bg-slate-700 rounded text-slate-200" title="Bullets"><i data-lucide="list" class="w-4 h-4"></i></button>
+            <button onclick="execCmd('removeFormat')" class="p-1 hover:bg-slate-700 rounded text-slate-200" title="Clear Formatting"><i data-lucide="eraser" class="w-4 h-4"></i></button>
+        </div>
+    </div>
+
+    <div id="pdf-content" class="page-wrapper">
+        <!-- PAGE 1: CORE STATS -->
+        <div class="sheet-container">
+            <div class="flex justify-between items-start mb-2">
+                <div class="w-2/3">
+                    <h1 class="header-font text-4xl text-sky-700 mb-2 uppercase italic leading-none">Star Traders</h1>
+                    <div class="grid grid-cols-2 gap-x-6 gap-y-1">
+                        <div class="col-span-2">
+                            <label class="text-[9px] font-bold uppercase text-slate-400 block">Name</label>
+                            <input type="text" id="charName" class="text-xl font-bold border-b-2 border-slate-300">
+                        </div>
+                        <div>
+                            <label class="text-[9px] font-bold uppercase text-slate-400 block">Species</label>
+                            <input type="text" id="species" class="text-sm">
+                        </div>
+                        <div class="flex gap-4">
+                            <div>
+                                <label class="text-[9px] font-bold uppercase text-slate-400 block">Refresh</label>
+                                <input type="number" id="refresh" value="6" class="text-sm font-bold text-center w-10">
+                            </div>
+                            <div>
+                                <label class="text-[9px] font-bold uppercase text-slate-400 block">FP</label>
+                                <input type="number" id="fatePoints" value="6" class="text-sm font-bold text-center w-10">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-1/3 flex flex-col items-end">
+                    <div class="w-28 h-32 border-4 border-slate-800 rounded bg-slate-50 flex items-center justify-center relative overflow-hidden">
+                        <img id="profile-img" src="" class="hidden w-full h-full object-cover">
+                        <div id="img-placeholder" class="text-slate-300 flex flex-col items-center text-center p-2">
+                            <i data-lucide="user" class="w-8 h-8"></i>
+                            <span class="text-[8px] uppercase font-bold">Upload</span>
+                        </div>
+                        <input type="file" id="imgInput" class="absolute inset-0 opacity-0 cursor-pointer no-print" onchange="handleImage(this)">
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="mb-4">
+                <h2 class="header-font text-sm bg-slate-900 text-white px-3 py-1 mb-2 uppercase italic">Core Persona Aspects</h2>
+                <div class="grid grid-cols-1 gap-y-1">
+                    <div class="flex items-center gap-4"><label class="font-bold text-[10px] text-slate-500 w-32 shrink-0 uppercase">High Concept</label><input type="text" id="highConcept" class="text-sm"></div>
+                    <div class="flex items-center gap-4"><label class="font-bold text-[10px] text-slate-500 w-32 shrink-0 uppercase">Trouble</label><input type="text" id="trouble" class="text-sm"></div>
+                    <div class="flex items-center gap-4"><label class="font-bold text-[10px] text-slate-500 w-32 shrink-0 uppercase">Species Heritage</label><input type="text" id="speciesHeritage1" class="text-sm"></div>
+                    <div class="flex items-center gap-4"><label class="font-bold text-[10px] text-slate-500 w-32 shrink-0 uppercase">Species Heritage</label><input type="text" id="speciesHeritage2" class="text-sm"></div>
+                    <div class="flex items-center gap-4"><label class="font-bold text-[10px] text-slate-500 w-32 shrink-0 uppercase">Aptitude</label><input type="text" id="aptitude" class="text-sm"></div>
+                    <div class="flex items-center gap-4"><label class="font-bold text-[10px] text-slate-500 w-32 shrink-0 uppercase">Relationship</label><input type="text" id="relationship" class="text-sm"></div>
+                    <div class="flex items-center gap-4"><label class="font-bold text-[10px] text-slate-500 w-32 shrink-0 uppercase">Free Aspect</label><input type="text" id="freeAspect" class="text-sm"></div>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-6 flex-grow overflow-hidden">
+                <!-- Left: Skills -->
+                <div class="flex flex-col">
+                    <h2 class="header-font text-[11px] bg-purple-900 text-white px-2 py-0.5 mb-1 uppercase italic">Skills</h2>
+                    <div class="grid grid-cols-1 gap-y-0" id="skills-container"></div>
+                    <div class="mt-4">
+                        <h2 class="header-font text-[11px] bg-sky-700 text-white px-2 py-0.5 mb-1 uppercase italic">Credits</h2>
+                        <div class="flex justify-between px-1">
+                            <input type="checkbox" class="checkbox-custom" id="cred1"><input type="checkbox" class="checkbox-custom" id="cred2">
+                            <input type="checkbox" class="checkbox-custom" id="cred3"><input type="checkbox" class="checkbox-custom" id="cred4">
+                            <input type="checkbox" class="checkbox-custom" id="cred5"><input type="checkbox" class="checkbox-custom" id="cred6">
+                            <input type="checkbox" class="checkbox-custom" id="cred7"><input type="checkbox" class="checkbox-custom" id="cred8">
+                            <input type="checkbox" class="checkbox-custom" id="cred9"><input type="checkbox" class="checkbox-custom" id="cred10">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Status/Consequences -->
+                <div class="flex flex-col gap-2.5">
+                    <div class="bg-slate-50 px-2 py-1 border border-slate-200 rounded">
+                        <h2 class="header-font text-[10px] text-slate-900 border-b border-slate-900 mb-1 uppercase">Conditions</h2>
+                        <div class="space-y-1">
+                            <div class="flex justify-between items-center"><span class="condition-label">Winded</span><div class="flex gap-1" id="box-winded"></div></div>
+                            <div class="flex justify-between items-center"><span class="condition-label">Angry</span><div class="flex gap-1" id="box-angry"></div></div>
+                            <div class="flex justify-between items-center pt-0.5 border-t border-slate-200"><span class="condition-label">Stunned</span><div class="flex gap-1" id="box-stunned"></div></div>
+                            <div class="flex justify-between items-center pt-0.5 border-t border-slate-200"><span class="condition-label">Broken</span><div class="flex gap-1" id="box-broken"></div></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 px-2 py-1 border border-slate-200 rounded">
+                        <h2 class="header-font text-[10px] text-slate-900 border-b border-slate-900 mb-1 uppercase">Shields & Armor</h2>
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center gap-2"><span class="condition-label">Shield</span><input type="number" id="shieldLevel" min="0" max="3" value="0" onchange="updateDefenseUI()" class="w-8 text-[11px] font-bold text-center border-none"></div>
+                                <div class="flex gap-1" id="box-shield"></div>
+                            </div>
+                            <div class="flex justify-between items-center pt-0.5 border-t border-slate-200">
+                                <div class="flex items-center gap-2"><span class="condition-label">Armor</span><input type="number" id="armorLevel" min="0" max="3" value="0" onchange="updateDefenseUI()" class="w-8 text-[11px] font-bold text-center border-none"></div>
+                                <div class="text-[9px] font-black bg-slate-800 text-white px-1.5 py-0.5 rounded" id="armorLabel">No</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex-grow">
+                        <h2 class="header-font text-[11px] bg-red-700 text-white px-2 py-0.5 mb-1 uppercase italic">Consequences</h2>
+                        <div class="space-y-1" id="consequences-list">
+                            <div><label class="text-[8px] font-bold uppercase text-slate-400 block leading-none">Mild (2)</label><input type="text" id="mildConsequence" class="text-sm py-0"></div>
+                            <div id="extra-mild-container" class="space-y-1"></div>
+                            <div><label class="text-[8px] font-bold uppercase text-slate-400 block leading-none mt-0.5">Moderate (4)</label><input type="text" id="modConsequence" class="text-sm py-0"></div>
+                            <div id="extra-mod-container" class="space-y-1"></div>
+                            <div><label class="text-[8px] font-bold uppercase text-slate-400 block leading-none mt-0.5">Severe (6)</label><input type="text" id="sevConsequence" class="text-sm py-0"></div>
+                            <div id="extra-sev-container" class="space-y-1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 2 -->
+        <div class="sheet-container">
+            <h1 class="header-font text-2xl text-sky-700 uppercase italic border-b-2 border-slate-900 pb-1 mb-4">Dossier</h1>
+            <div class="space-y-4 flex-grow flex flex-col overflow-hidden">
+                <div class="flex-[3] flex flex-col">
+                    <h2 class="header-font text-xs bg-slate-900 text-white px-2 py-1 mb-1 uppercase">Species Abilities, Stunts & Gear</h2>
+                    <div id="stuntsGear" contenteditable="true" class="rich-editor text-sm"></div>
+                </div>
+                <div class="flex-[1] flex flex-col">
+                    <h2 class="header-font text-xs bg-slate-900 text-white px-2 py-1 mb-1 uppercase">Description</h2>
+                    <div id="charDescription" contenteditable="true" class="rich-editor text-sm"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 3 -->
+        <div class="sheet-container">
+            <h1 class="header-font text-2xl text-sky-700 uppercase italic border-b-2 border-slate-900 pb-1 mb-4">Campaign Log & Notes</h1>
+            <div id="campaignNotes" contenteditable="true" class="rich-editor text-sm flex-grow"></div>
+        </div>
+    </div>
+
+    <script>
+        const skills = ["Athletics", "Command", "Contacts", "Empathy", "Engineering", "Fight", "Haggle", "Larceny", "Notice", "Physique", "Pilot", "Provoke", "Rapport", "Resolve", "Science", "Shoot", "Stealth", "Survival", "Systems"];
+        
+        // Correct ranks mapped with their titles
+        const rankDefinitions = [
+            { val: "+0", label: "Mediocre" },
+            { val: "+1", label: "Average" },
+            { val: "+2", label: "Fair" },
+            { val: "+3", label: "Good" },
+            { val: "+4", label: "Great" },
+            { val: "+5", label: "Superb" },
+            { val: "+6", label: "Fantastic" },
+            { val: "+7", label: "Epic" },
+            { val: "+8", label: "Legendary" }
+        ];
+
+        const skillContainer = document.getElementById('skills-container');
+        skills.forEach(skill => {
+            const div = document.createElement('div');
+            div.className = "flex justify-between items-center border-b border-slate-50 py-0.5";
+            div.innerHTML = `<span class="font-bold text-[11px] uppercase text-slate-700">${skill}</span>
+                <select id="skill_${skill.toLowerCase()}" onchange="updateConditionBoxes()" class="w-32 text-[10px] text-right border-none py-0">
+                    ${rankDefinitions.map(r => `<option value="${r.val}">${r.val} ${r.label}</option>`).join('')}
+                </select>`;
+            skillContainer.appendChild(div);
+        });
+
+        function execCmd(command) {
+            document.execCommand(command, false, null);
+        }
+
+        function updateConditionBoxes() {
+            const getVal = (id) => {
+                const raw = document.getElementById(`skill_${id}`)?.value || "+0";
+                return parseInt(raw.replace('+', '')) || 0;
+            };
+            const p = getVal('physique'); const r = getVal('resolve');
+            renderBoxes('box-winded', 'winded', 1 + (p >= 2 ? 1 : 0));
+            renderBoxes('box-angry', 'angry', 1 + (r >= 2 ? 1 : 0));
+            renderBoxes('box-stunned', 'stunned', 2 + (p >= 4 || r >= 4 ? (p >= 4 && r >= 4 ? 2 : 1) : 0));
+            renderBoxes('box-broken', 'broken', 2 + (p >= 5 || r >= 5 ? (p >= 5 && r >= 5 ? 2 : 1) : 0));
+        }
+
+        function updateDefenseUI() {
+            const sh = parseInt(document.getElementById('shieldLevel').value) || 0;
+            renderBoxes('box-shield', 'shield', sh > 0 ? sh + 1 : 0);
+
+            const ar = parseInt(document.getElementById('armorLevel').value) || 0;
+            document.getElementById('armorLabel').innerText = ["No", "L", "M", "H"][ar] || "No";
+
+            const mild2Val = document.getElementById('mildConsequence2')?.value || '';
+            const mod2Val = document.getElementById('modConsequence2')?.value || '';
+            const sev2Val = document.getElementById('sevConsequence2')?.value || '';
+
+            const escapeAttr = (value) => String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/"/g, '&quot;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+
+            const row = (id, label, value) => `<div><label class="text-[8px] font-bold uppercase text-sky-600 block leading-none">${label}</label><input type="text" id="${id}" class="text-sm py-0" value="${escapeAttr(value)}"></div>`;
+
+            document.getElementById('extra-mild-container').innerHTML = ar >= 1 ? row('mildConsequence2', 'Armor Mild (2)', mild2Val) : '';
+            document.getElementById('extra-mod-container').innerHTML = ar >= 2 ? row('modConsequence2', 'Armor Moderate (4)', mod2Val) : '';
+            document.getElementById('extra-sev-container').innerHTML = ar >= 3 ? row('sevConsequence2', 'Armor Severe (6)', sev2Val) : '';
+        }
+
+        function renderBoxes(id, type, count) {
+            const el = document.getElementById(id);
+            const saved = Array.from(el.querySelectorAll('input')).map(i => i.checked);
+            el.innerHTML = '';
+            for (let i = 0; i < count; i++) {
+                const cb = document.createElement('input');
+                cb.type = 'checkbox'; cb.className = 'checkbox-custom'; cb.id = `cond_${type}_${i}`;
+                if (saved[i]) cb.checked = true;
+                el.appendChild(cb);
+            }
+        }
+
+        function handleImage(input) {
+            if (input.files?.[0]) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    document.getElementById('profile-img').src = e.target.result;
+                    document.getElementById('profile-img').classList.remove('hidden');
+                    document.getElementById('img-placeholder').classList.add('hidden');
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        async function generatePDF() {
+            const element = document.getElementById('pdf-content');
+            const name = document.getElementById('charName').value || 'Character';
+            window.scrollTo(0,0);
+            element.classList.add('pdf-mode');
+            const opt = {
+                margin: 0,
+                filename: `${name}_Sheet.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            try {
+                await html2pdf().set(opt).from(element).save();
+            } finally {
+                element.classList.remove('pdf-mode');
+            }
+        }        function exportJSON() {
+            const data = {};
+            document.querySelectorAll('input').forEach(el => {
+                if (el.id) {
+                    if (el.type === 'checkbox') data[el.id] = el.checked;
+                    else if (el.type !== 'file') data[el.id] = el.value;
+                }
+            });
+            document.querySelectorAll('select').forEach(el => {
+                if (el.id) data[el.id] = el.value;
+            });
+            document.querySelectorAll('.rich-editor').forEach(el => {
+                if (el.id) data[el.id] = el.innerHTML;
+            });
+
+            ['winded', 'angry', 'stunned', 'broken', 'shield'].forEach(type => {
+                const states = [];
+                document.querySelectorAll(`[id^="cond_${type}_"]`).forEach(checkbox => {
+                    states.push(checkbox.checked);
+                });
+                data[`dynamic_boxes_${type}`] = states;
+            });
+
+            const profileImg = document.getElementById('profile-img');
+            data.profileImgSrc = profileImg && profileImg.src ? profileImg.src : "";
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `StarTrader_Data.json`;
+            a.click();
+        }
+
+        function importJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = e => {
+                const data = JSON.parse(e.target.result);
+
+                const applyDataToExistingElements = () => {
+                    for (const key in data) {
+                        const el = document.getElementById(key);
+                        if (el) {
+                            if (el.type === 'checkbox') {
+                                el.checked = data[key];
+                            } else if (el.classList.contains('rich-editor')) {
+                                el.innerHTML = data[key];
+                            } else {
+                                el.value = data[key];
+                            }
+                        }
+                    }
+                };
+
+                applyDataToExistingElements();
+
+                // Rebuild all dynamic UI sections after raw values are loaded
+                updateConditionBoxes();
+                updateDefenseUI();
+
+                // Second pass so newly created dynamic fields also receive saved values
+                applyDataToExistingElements();
+
+                // Restore dynamic checkbox states
+                ['winded', 'angry', 'stunned', 'broken', 'shield'].forEach(type => {
+                    const savedChecks = data[`dynamic_boxes_${type}`] || [];
+                    savedChecks.forEach((checked, i) => {
+                        const box = document.getElementById(`cond_${type}_${i}`);
+                        if (box) box.checked = checked;
+                    });
+                });
+
+                const img = document.getElementById('profile-img');
+                const placeholder = document.getElementById('img-placeholder');
+                if (data.profileImgSrc && data.profileImgSrc.startsWith('data:image')) {
+                    img.src = data.profileImgSrc;
+                    img.classList.remove('hidden');
+                    placeholder.classList.add('hidden');
+                } else {
+                    img.src = '';
+                    img.classList.add('hidden');
+                    placeholder.classList.remove('hidden');
+                }
+
+                // Allow re-importing the same file later
+                event.target.value = '';
+            };
+
+            reader.readAsText(file);
+        }
+
+        function resetForm() {
+            if (!confirm("Clear all data?")) return;
+
+            document.querySelectorAll('input').forEach(el => {
+                if (!el.id) return;
+
+                if (el.type === 'checkbox') {
+                    el.checked = false;
+                } else if (el.type === 'file') {
+                    el.value = '';
+                } else if (el.type === 'number') {
+                    if (el.id === 'refresh' || el.id === 'fatePoints') {
+                        el.value = 6;
+                    } else if (el.id === 'shieldLevel' || el.id === 'armorLevel') {
+                        el.value = 0;
+                    } else {
+                        el.value = '';
+                    }
+                } else {
+                    el.value = '';
+                }
+            });
+
+            document.querySelectorAll('select').forEach(el => {
+                if (el.id && el.id.startsWith('skill_')) {
+                    el.value = '+0';
+                } else {
+                    el.selectedIndex = 0;
+                }
+            });
+
+            document.querySelectorAll('.rich-editor').forEach(el => {
+                el.innerHTML = '';
+            });
+
+            const img = document.getElementById('profile-img');
+            const placeholder = document.getElementById('img-placeholder');
+            const imgInput = document.getElementById('imgInput');
+
+            if (img) {
+                img.src = '';
+                img.classList.add('hidden');
+            }
+            if (placeholder) {
+                placeholder.classList.remove('hidden');
+            }
+            if (imgInput) {
+                imgInput.value = '';
+            }
+
+            const importFile = document.getElementById('importFile');
+            if (importFile) {
+                importFile.value = '';
+            }
+
+            // Rebuild all dynamic UI from true defaults
+            updateConditionBoxes();
+            updateDefenseUI();
+
+            // Make sure all dynamic boxes start unchecked
+            ['winded', 'angry', 'stunned', 'broken', 'shield'].forEach(type => {
+                document.querySelectorAll(`[id^="cond_${type}_"]`).forEach(box => {
+                    box.checked = false;
+                });
+            });
+        }
+
+        window.onload = () => {
+            updateConditionBoxes();
+            updateDefenseUI();
+            lucide.createIcons();
+        };
+    </script>
+</body>
+</html>

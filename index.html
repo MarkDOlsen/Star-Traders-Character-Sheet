@@ -1,34 +1,214 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Web Apps</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tools for Mark's Fate Campaigns</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 40px;
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --panel-alt: #1f2937;
+      --text: #f3f4f6;
+      --muted: #cbd5e1;
+      --accent: #38bdf8;
+      --accent-hover: #0ea5e9;
+      --border: #334155;
+      --shadow: rgba(0, 0, 0, 0.35);
     }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #0b1120 0%, #111827 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 20px 60px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: 2.5rem;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      margin: 0 auto;
+      max-width: 750px;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .campaign-section {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 28px;
+      align-items: start;
+      background: rgba(17, 24, 39, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px;
+      margin-bottom: 32px;
+      box-shadow: 0 12px 30px var(--shadow);
+    }
+
+    .campaign-logo {
+      width: 100%;
+      max-width: 200px;
+      border-radius: 14px;
+      display: block;
+      border: 1px solid var(--border);
+      background: #0b1220;
+    }
+
+    .campaign-content h2 {
+      margin-top: 0;
+      margin-bottom: 8px;
+      font-size: 1.9rem;
+    }
+
+    .tagline {
+      margin: 0 0 16px;
+      color: var(--accent);
+      font-size: 1.05rem;
+      font-weight: bold;
+      letter-spacing: 0.02em;
+    }
+
+    .description {
+      color: var(--muted);
+      margin-bottom: 22px;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
     .button {
       display: inline-block;
-      margin: 12px;
-      padding: 14px 24px;
-      font-size: 18px;
+      padding: 12px 18px;
+      background: var(--accent);
+      color: #082032;
       text-decoration: none;
-      border: 1px solid #333;
-      border-radius: 8px;
-      color: #111;
+      font-weight: bold;
+      border-radius: 10px;
+      transition: background 0.2s ease, transform 0.15s ease;
     }
+
     .button:hover {
-      background: #f0f0f0;
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+
+    @media (max-width: 760px) {
+      .campaign-section {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .campaign-logo {
+        margin: 0 auto;
+      }
+
+      .button-row {
+        justify-content: center;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Choose an App</h1>
-  <a class="button" href="app-star-traders-character.html">Star Traders Character Sheet App</a>
-  <a class="button" href="app-star-traders-ship.html">Star Traders Ship Record Sheet App</a>
-  <a class="button" href="app-DTI_character.html">Doors to Infinity Character Sheet App</a>
+  <div class="container">
+    <header>
+      <h1>Tools for Mark's Fate Campaigns</h1>
+      <p class="subtitle">
+        A collection of web tools for character tracking, ship records, and campaign play aids
+        for my ongoing Fate campaigns.
+      </p>
+    </header>
+
+    <section class="campaign-section">
+      <img
+        src="Star-Traders-ICON.jpg"
+        alt="Star Traders campaign logo"
+        class="campaign-logo"
+      />
+
+      <div class="campaign-content">
+        <h2>Star Traders</h2>
+        <p class="tagline">Keep your blasters ready and the engine running.</p>
+        <div class="description">
+          <p>
+            <strong>Star Traders</strong> is a classic science-fantasy space opera set in
+            <strong>The Fringe</strong>, the lawless outer frontier of the galaxy, where players
+            are smugglers, freebooters, and daring adventurers piloting a beloved but barely
+            functional starship.
+          </p>
+          <p>
+            The campaign centers on pulp-style action, high-risk trade and smuggling runs,
+            dangerous bargains, exotic alien worlds, and the constant pressure of debts, rival
+            factions, espionage, and betrayal. Fortune always seems just one jump away—if bad luck,
+            greedy employers, or the powers of the Fringe do not catch up first.
+          </p>
+        </div>
+
+        <div class="button-row">
+          <a class="button" href="app-star-traders-character.html">Star Traders Character Sheet</a>
+          <a class="button" href="app-star-traders-ship.html">Star Traders Ship Record Sheet</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="campaign-section">
+      <img
+        src="DoorsToInfinity-ICON.jpg"
+        alt="Doors to Infinity campaign logo"
+        class="campaign-logo"
+      />
+
+      <div class="campaign-content">
+        <h2>Doors to Infinity</h2>
+        <p class="tagline">Open the door. Defy the infinite.</p>
+        <div class="description">
+          <p>
+            <strong>Doors to Infinity</strong> is a Fate hack inspired by
+            <strong>Lords of Gossamer and Shadow</strong>, set across an endless multiverse of
+            parallel realities known as the <strong>Gossamer worlds</strong>.
+          </p>
+          <p>
+            These worlds are separated by the <strong>Shadow</strong>, an infinite, howling void of
+            nonexistence, and connected by the <strong>Grand Stair</strong>—a vast labyrinth of
+            stairways, corridors, and mystical <strong>Doors</strong> that lead from one universe
+            to another.
+          </p>
+          <p>
+            Players take the roles of <strong>Wardens of the Grand Stair</strong>, rare individuals
+            gifted with the power to perceive and open these Doors. Where others see only an
+            ordinary doorway, a Warden sees a path to wonder, danger, intrigue, and worlds beyond
+            imagination.
+          </p>
+        </div>
+
+        <div class="button-row">
+          <a class="button" href="app-DTI_character.html">Doors to Infinity Character Sheet</a>
+        </div>
+      </div>
+    </section>
+  </div>
 </body>
 </html>

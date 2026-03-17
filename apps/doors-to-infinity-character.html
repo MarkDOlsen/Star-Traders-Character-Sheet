@@ -133,15 +133,11 @@
         </div>
 
         <!-- Formatting Toolbar for Rich Text (Shared) -->
-        <div id="editor-toolbar" class="flex items-center gap-2 bg-slate-100 p-1 rounded border border-slate-300 opacity-50 pointer-events-none transition-opacity">
-            <button onclick="execCmd('bold')" class="p-1 hover:bg-slate-200 rounded" title="Bold"><i data-lucide="bold" class="w-4 h-4"></i></button>
-            <button onclick="execCmd('italic')" class="p-1 hover:bg-slate-200 rounded" title="Italic"><i data-lucide="italic" class="w-4 h-4"></i></button>
-            <div class="w-px h-4 bg-slate-300 mx-1"></div>
-            <button onclick="execCmd('insertUnorderedList')" class="p-1 hover:bg-slate-200 rounded" title="Bullet List"><i data-lucide="list" class="w-4 h-4"></i></button>
-            <button onclick="execCmd('insertOrderedList')" class="p-1 hover:bg-slate-200 rounded" title="Numbered List"><i data-lucide="list-ordered" class="w-4 h-4"></i></button>
-            <div class="w-px h-4 bg-slate-300 mx-1"></div>
-            <button onclick="execCmd('formatBlock', 'h3')" class="p-1 hover:bg-slate-200 rounded font-bold text-xs">H</button>
-            <button onclick="execCmd('removeFormat')" class="p-1 hover:bg-slate-200 rounded" title="Clear Formatting"><i data-lucide="eraser" class="w-4 h-4"></i></button>
+        <div id="editor-toolbar" class="flex items-center gap-2 bg-slate-800 p-1 rounded border border-slate-600">
+            <button onclick="execCmd('bold')" class="p-1 hover:bg-slate-700 rounded text-slate-200" title="Bold"><i data-lucide="bold" class="w-4 h-4"></i></button>
+            <button onclick="execCmd('italic')" class="p-1 hover:bg-slate-700 rounded text-slate-200" title="Italic"><i data-lucide="italic" class="w-4 h-4"></i></button>
+            <button onclick="execCmd('insertUnorderedList')" class=""p-1 hover:bg-slate-700 rounded text-slate-200" title="Bullet List"><i data-lucide="list" class="w-4 h-4"></i></button>
+            <button onclick="execCmd('removeFormat')" class="p-1 hover:bg-slate-700 rounded text-slate-200" title="Clear Formatting"><i data-lucide="eraser" class="w-4 h-4"></i></button>
         </div>
     </div>
 

@@ -10,12 +10,10 @@ _For players in my Fate-based TTRPG games_
 - Character sheet for Doors to Infinity campaign setting which allows saving, importing, and printing  
   
 ### In Progress
-- 
+- Full Doors to Infinity campaign/setting introduction document
 
 #### TO DO
-1. Add full **Doors to Infinity** campaign pitch to list  
-2. Rename the repo to something like "Mark's Fate TTRPG Tools"  
-3. Add "About your Game Master" section with my gaming history and GM style    
+1. Rename the repo to something like "Mark's Fate TTRPG Tools"    
 
   
 ---  

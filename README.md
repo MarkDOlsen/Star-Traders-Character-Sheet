@@ -7,20 +7,16 @@ _For players in my Fate-based TTRPG games_
 - Character sheet for Star Traders campaign setting which allows saving, importing, and printing
 - Ship Record sheet for Star Traders campaign setting which allows saving, importing, and printing
 - Campaign pitch deck for future campaigns  
-
+- Character sheet for Doors to Infinity campaign setting which allows saving, importing, and printing  
   
 ### In Progress
-- Character sheet for Doors to Infinity campaign setting which allows saving, importing, and printing
+- 
 
 #### TO DO
-1. Fix printing on DtI character sheet - PDF is not scaling properly and is running off the page  
-2. Not all fields are being properly exported/imported from the DtI character sheet
-3. Update top buttons style and text to match Star Traders sheets styles
-4. Update background on DtI character sheet to match other pages
-5. Add full **Doors to Infinity** campaign pitch to list
-7. Rename the repo to something like "Mark's Fate TTRPG Tools"
-8. Add Lines and Veils form
-9. Add "About your Game Master" section with my gaming history and GM style  
+1. Add full **Doors to Infinity** campaign pitch to list
+2. Rename the repo to something like "Mark's Fate TTRPG Tools"
+3. Add Lines and Veils form
+4. Add "About your Game Master" section with my gaming history and GM style  
 
   
 ---  

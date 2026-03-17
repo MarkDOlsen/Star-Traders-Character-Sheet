@@ -114,6 +114,7 @@
 </head>
 <body>
 
+    <!-- TOP TOOLBAR -->
     <div class="no-print sticky top-0 z-50 bg-slate-900 border-b border-slate-700 p-4 flex flex-col items-center gap-3 shadow-xl">
         <div class="flex justify-center gap-4 flex-wrap">
             <button onclick="exportJSON()" class="flex items-center gap-2 bg-sky-600 text-white px-4 py-2 rounded hover:bg-sky-700 transition">
@@ -138,7 +139,10 @@
         </div>
     </div>
 
+    <!-- CHARACTER SHEET -->
     <div id="pdf-content" class="page-wrapper">
+
+        <!-- TOP SECTION -->
         <div class="sheet-container">
             <div class="flex justify-between items-start mb-3 gap-6">
                 <div class="w-2/3">
@@ -176,17 +180,19 @@
                 </div>
             </div>
 
+            <!-- ASPECTS SECTION -->
             <div class="mb-4">
                 <h2 class="header-font text-sm bg-slate-900 text-white px-3 py-1 mb-2 uppercase italic">Ship Aspects</h2>
                 <div class="grid grid-cols-1 gap-y-1">
                     <div class="flex items-center gap-4"><label class="font-bold text-[10px] text-slate-500 w-20 shrink-0 uppercase">Aspect</label><input type="text" id="aspect1" class="text-sm"></div>
                     <div class="flex items-center gap-4"><label class="font-bold text-[10px] text-slate-500 w-20 shrink-0 uppercase">Aspect</label><input type="text" id="aspect2" class="text-sm"></div>
                     <div class="flex items-center gap-4"><label class="font-bold text-[10px] text-slate-500 w-20 shrink-0 uppercase">Aspect</label><input type="text" id="aspect3" class="text-sm"></div>
-                    <div class="flex items-center gap-4"><label class="font-bold text-[10px] text-slate-500 w-20 shrink-0 uppercase">Aspect</label><input type="text" id="aspect4" class="text-sm"></div>
-                    <div class="flex items-center gap-4"><label class="font-bold text-[10px] text-slate-500 w-20 shrink-0 uppercase">Aspect</label><input type="text" id="aspect5" class="text-sm"></div>
+                    <div class="flex items-center gap-4"><label class="font-bold text-[10px] text-slate-500 w-20 shrink-0 uppercase">Aspect</label><input type="text" id="aspect4" placeholder="Can add a 4th aspect via upgrades" class="text-sm"></div>
+                    <div class="flex items-center gap-4"><label class="font-bold text-[10px] text-slate-500 w-20 shrink-0 uppercase">Aspect</label><input type="text" id="aspect5" placeholder="Can add a 4th aspect via upgrades" class="text-sm"></div>
                 </div>
             </div>
 
+            <!-- CALCULATED STATS SECTION -->
             <div class="grid grid-cols-2 gap-6 flex-grow overflow-hidden">
                 <div class="flex flex-col gap-3">
                     <div class="grid grid-cols-2 gap-3">
@@ -208,6 +214,7 @@
                         </div>
                     </div>
 
+                    <!-- ENGINES SECTION -->
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <h2 class="header-font text-[11px] bg-purple-900 text-white px-2 py-0.5 mb-1 uppercase italic">Drive Systems</h2>
@@ -250,6 +257,7 @@
                     </div>
                 </div>
 
+                <!-- STRESS AND CONDITIONS SECTION -->
                 <div class="flex flex-col gap-2.5">
                     <div class="bg-slate-50 px-2 py-1 border border-slate-200 rounded">
                         <h2 class="header-font text-[10px] text-slate-900 border-b border-slate-900 mb-1 uppercase">Toughness</h2>
@@ -289,6 +297,7 @@
                         </div>
                     </div>
 
+                    <!-- CONSEQUENCES SECTION -->
                     <div class="flex-grow">
                         <h2 class="header-font text-[11px] bg-red-700 text-white px-2 py-0.5 mb-1 uppercase italic">Consequences</h2>
                         <div class="space-y-1">
@@ -304,6 +313,9 @@
             </div>
         </div>
 
+        <!-- PAGE 2 -->
+
+        <!-- UPGRADES SECTION -->
         <div class="sheet-container">
             <h1 class="header-font text-2xl text-sky-700 uppercase italic border-b-2 border-slate-900 pb-1 mb-4">Upgrades</h1>
             <div class="grid grid-cols-2 gap-5 flex-grow overflow-hidden">
@@ -345,6 +357,7 @@
                         </div>
                     </div>
 
+                    <!-- NOTES SECTION -->
                     <div class="border border-slate-200 rounded p-4 bg-slate-50 flex flex-col flex-grow">
                         <h2 class="header-font text-xs bg-slate-900 text-white px-2 py-1 mb-3 uppercase">Other Notes</h2>
                         <div id="upgradeNotes" contenteditable="true" class="rich-editor text-sm flex-grow min-h-[420px]"></div>
@@ -353,6 +366,7 @@
             </div>
         </div>
 
+        <!-- PAGE 3: RUNNING A SHIP IN COMBAT REFERENCE -->
         <div class="sheet-container">
             <h1 class="header-font text-2xl text-sky-700 uppercase italic border-b-2 border-slate-900 pb-1 mb-4">Quick Reference</h1>
             <div class="reference-text text-[14px] leading-snug overflow-hidden">
@@ -395,6 +409,7 @@
         </div>
     </div>
 
+    <!-- JAVASCRIPT -->
     <script>
         const sizeOrder = ["Small", "Medium", "Large", "Huge", "Titanic"];
         const sizeStats = {

@@ -22,7 +22,7 @@
            We use 816px to represent 8.5 inches at 96 DPI for perfect PDF scaling.
         */
         .page-wrapper { 
-            width: 816px; 
+            width: 800px; 
             margin: 20px auto; 
             display: flex; 
             flex-direction: column; 
@@ -92,24 +92,27 @@
         select { cursor: pointer; appearance: none; }
         .condition-label { font-size: 0.8rem; font-weight: 700; color: #1e293b; }
         .condition-desc { font-size: 0.7rem; color: #64748b; font-weight: 400; }
+
+        #profile-img {
+          object-fit: cover;
+          object-position: center;
+        }
         
         /* Print-specific overrides */
         @media print { 
             body { background: white; }
             .no-print { display: none; }
-            .page-wrapper { margin: 0; gap: 0; width: 8.5in; }
+            .page-wrapper { margin: 0; width: 800px; gap: 0; }
             .sheet-container { 
                 box-shadow: none; 
                 border: none; 
                 margin: 0; 
-                padding: 0.4in 0.5in;
                 page-break-after: always;
-                page-break-inside: avoid;
-                width: 8.5in;
-                height: 11in;
             }
             .rich-editor { border: none; background: transparent; padding: 0; }
         }
+
+        .pdf-mode { margin: 0 !important; padding: 0 !important; width: 800px !important; }
     </style>
 </head>
 <body>
@@ -236,28 +239,28 @@
 
                     <div class="space-y-4">
                         <div>
-                            <div class="condition-label">Wounded <span class="condition-desc">— lasting; 4 shifts</span></div>
+                            <div class="condition-label">Wounded <span class="condition-desc">â€” lasting; 4 shifts</span></div>
                             <div class="flex items-center gap-2 mt-1">
                                 <input type="checkbox" class="checkbox-custom shrink-0" id="wounded">
                                 <input type="text" id="woundedNotes" class="text-[10px] italic w-full" placeholder="Specify...">
                             </div>
                         </div>
                         <div>
-                            <div class="condition-label">In Peril <span class="condition-desc">— sticky; 4 shifts</span></div>
+                            <div class="condition-label">In Peril <span class="condition-desc">â€” sticky; 4 shifts</span></div>
                             <div class="flex items-center gap-2 mt-1">
                                 <input type="checkbox" class="checkbox-custom shrink-0" id="inperil">
                                 <input type="text" id="inperilNotes" class="text-[10px] italic w-full" placeholder="Specify...">
                             </div>
                         </div>
                         <div>
-                            <div class="condition-label">Doomed <span class="condition-desc">— lasting; 6 shifts</span></div>
+                            <div class="condition-label">Doomed <span class="condition-desc">â€” lasting; 6 shifts</span></div>
                             <div class="flex items-center gap-2 mt-1">
                                 <input type="checkbox" class="checkbox-custom shrink-0" id="doomed">
                                 <input type="text" id="doomedNotes" class="text-[10px] italic w-full" placeholder="Specify...">
                             </div>
                         </div>
                         <div>
-                            <div class="condition-label">Indebted <span class="condition-desc">— Favors</span></div>
+                            <div class="condition-label">Indebted <span class="condition-desc">â€” Favors</span></div>
                             <div class="flex flex-col gap-2 mt-1">
                                 <div class="flex gap-1">
                                     <input type="checkbox" class="checkbox-custom" id="debt1">
@@ -382,30 +385,50 @@
         }
 
         /** PDF GENERATION **/
-        function generatePDF() {
+        async function generatePDF() {
             const element = document.getElementById('pdf-content');
             const charName = document.getElementById('charName').value || 'Warden_Sheet';
+            window.scrollTo(0, 0);
+            element.classList.add('pdf-mode');
             const opt = { 
                 margin: 0, 
                 filename: `${charName.replace(/\s+/g, '_')}.pdf`, 
                 image: { type: 'jpeg', quality: 0.98 }, 
-                html2canvas: { scale: 2, useCORS: true, letterRendering: true, width: 816 }, 
-                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+                html2canvas: { scale: 2, useCORS: true, scrollY: 0 }, 
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
             };
-            html2pdf().set(opt).from(element).save();
+            try {
+                await html2pdf().set(opt).from(element).save();
+            } finally {
+                element.classList.remove('pdf-mode');
+            }
         }
 
         /** DATA EXPORT **/
+        function getSavableFields() {
+            return Array.from(document.querySelectorAll('input, select, .rich-editor')).filter(el => {
+                if (!el.id) return false;
+                if (el.tagName === 'INPUT' && el.type === 'file') return false;
+                return true;
+            });
+        }
+
         function exportJSON() {
             const data = {};
-            document.querySelectorAll('input, select').forEach(el => { 
-                if(el.id) data[el.id] = el.type === 'checkbox' ? el.checked : el.value; 
+
+            getSavableFields().forEach(el => {
+                if (el.classList.contains('rich-editor')) {
+                    data[el.id] = el.innerHTML;
+                } else if (el.type === 'checkbox') {
+                    data[el.id] = el.checked;
+                } else {
+                    data[el.id] = el.value;
+                }
             });
-            document.querySelectorAll('.rich-editor').forEach(el => {
-                if(el.id) data[el.id] = el.innerHTML;
-            });
-            data['profileImgSrc'] = document.getElementById('profile-img').src;
+
+            const profileImg = document.getElementById('profile-img');
+            data.profileImgSrc = profileImg && profileImg.src && profileImg.src.startsWith('data:image') ? profileImg.src : '';
+
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -413,28 +436,47 @@
             a.href = url;
             a.download = `${charName.replace(/\s+/g, '_')}.json`;
             a.click();
+            URL.revokeObjectURL(url);
         }
 
         /** DATA IMPORT **/
         function importJSON(event) {
             const file = event.target.files[0];
             if (!file) return;
+
             const reader = new FileReader();
             reader.onload = e => {
-                const data = JSON.parse(e.target.result);
-                for (const key in data) {
-                    const el = document.getElementById(key);
-                    if (el) { 
-                        if (el.type === 'checkbox') el.checked = data[key]; 
-                        else if (el.classList.contains('rich-editor')) el.innerHTML = data[key];
-                        else el.value = data[key]; 
-                    }
-                }
-                if(data.profileImgSrc && data.profileImgSrc.startsWith('data:image')) {
+                try {
+                    const data = JSON.parse(e.target.result);
+
+                    getSavableFields().forEach(el => {
+                        if (!(el.id in data)) return;
+
+                        if (el.classList.contains('rich-editor')) {
+                            el.innerHTML = data[el.id] || '';
+                        } else if (el.type === 'checkbox') {
+                            el.checked = Boolean(data[el.id]);
+                        } else {
+                            el.value = data[el.id] ?? '';
+                        }
+                    });
+
                     const img = document.getElementById('profile-img');
-                    img.src = data.profileImgSrc;
-                    img.classList.remove('hidden');
-                    document.getElementById('img-placeholder').classList.add('hidden');
+                    const placeholder = document.getElementById('img-placeholder');
+                    if (data.profileImgSrc && typeof data.profileImgSrc === 'string' && data.profileImgSrc.startsWith('data:image')) {
+                        img.src = data.profileImgSrc;
+                        img.classList.remove('hidden');
+                        placeholder.classList.add('hidden');
+                    } else {
+                        img.src = '';
+                        img.classList.add('hidden');
+                        placeholder.classList.remove('hidden');
+                    }
+                } catch (err) {
+                    alert('Could not import JSON file. Please make sure it is a valid save exported from this sheet.');
+                    console.error('Import failed:', err);
+                } finally {
+                    event.target.value = '';
                 }
             };
             reader.readAsText(file);

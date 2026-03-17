@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Player Safety</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --panel-alt: #1f2937;
+      --text: #f3f4f6;
+      --muted: #cbd5e1;
+      --accent: #38bdf8;
+      --accent-hover: #0ea5e9;
+      --border: #334155;
+      --shadow: rgba(0, 0, 0, 0.35);
+      --warning: #f59e0b;
+      --soft: rgba(56, 189, 248, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #0b1120 0%, #111827 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 20px 60px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .header-icon {
+      width: 78px;
+      height: 78px;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: radial-gradient(circle at top, rgba(56, 189, 248, 0.22), rgba(15, 23, 42, 0.95));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      box-shadow: 0 10px 24px var(--shadow);
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: 2.5rem;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      margin: 0 auto;
+      max-width: 850px;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .top-links {
+      margin-top: 22px;
+    }
+
+    .section-card {
+      background: rgba(17, 24, 39, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px;
+      margin-bottom: 28px;
+      box-shadow: 0 12px 30px var(--shadow);
+    }
+
+    .section-card h2 {
+      margin-top: 0;
+      margin-bottom: 12px;
+      font-size: 1.9rem;
+    }
+
+    .tagline {
+      margin: 0 0 16px;
+      color: var(--accent);
+      font-size: 1.05rem;
+      font-weight: bold;
+      letter-spacing: 0.02em;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 12px 18px;
+      background: var(--accent);
+      color: #082032;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 10px;
+      transition: background 0.2s ease, transform 0.15s ease;
+    }
+
+    .button:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+
+    .callout {
+      border-left: 4px solid var(--warning);
+      background: rgba(245, 158, 11, 0.08);
+      padding: 16px 18px;
+      border-radius: 10px;
+      margin-top: 20px;
+      color: var(--muted);
+    }
+
+    .soft-callout {
+      border-left: 4px solid var(--accent);
+      background: var(--soft);
+      padding: 16px 18px;
+      border-radius: 10px;
+      margin-top: 20px;
+      color: var(--muted);
+    }
+
+    .two-column {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+      margin-top: 20px;
+    }
+
+    .mini-card {
+      background: rgba(31, 41, 55, 0.85);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+    }
+
+    .mini-card h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      color: var(--accent);
+    }
+
+    ul {
+      margin-top: 10px;
+      padding-left: 22px;
+    }
+
+    li {
+      margin-bottom: 10px;
+      color: var(--muted);
+    }
+
+    details {
+      background: rgba(31, 41, 55, 0.85);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 0;
+      margin-top: 18px;
+      overflow: hidden;
+    }
+
+    summary {
+      cursor: pointer;
+      list-style: none;
+      padding: 18px 20px;
+      font-weight: bold;
+      color: var(--text);
+      background: rgba(15, 23, 42, 0.5);
+    }
+
+    summary:hover {
+      background: rgba(15, 23, 42, 0.75);
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .details-content {
+      padding: 18px 20px 20px;
+    }
+
+    .topic-category {
+      margin-top: 16px;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: var(--accent);
+    }
+
+    .note {
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .tool-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 20px;
+    }
+
+    .tool-card {
+      background: rgba(31, 41, 55, 0.85);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+    }
+
+    .tool-card h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      color: var(--accent);
+      font-size: 1.1rem;
+    }
+
+    @media (max-width: 760px) {
+      .two-column,
+      .tool-list {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="header-icon" aria-hidden="true">🛡️</div>
+      <h1>Player Safety</h1>
+      <p class="subtitle">
+        Our goal is to tell exciting, challenging stories together while making sure that fictional
+        challenges do not cause <strong>real-life discomfort or distress</strong>. Think of
+        <strong>Lines and Veils</strong> as the blueprint for our shared comfort zone.
+      </p>
+      <div class="top-links button-row" style="justify-content: center;">
+        <a class="button" href="index.html">Back to Main Page</a>
+      </div>
+    </header>
+
+    <section class="section-card">
+      <h2>Why This Matters</h2>
+      <p class="tagline">Good boundaries make better games.</p>
+
+      <p>
+        Table safety is not about removing tension, horror, or drama from a game. It is about making
+        sure everyone can enjoy those things without being blindsided by content that crosses a personal
+        boundary. Setting expectations up front makes it easier for the group to relax, take risks in
+        character, and trust one another in play.
+      </p>
+
+      <div class="soft-callout">
+        <strong>The goal:</strong> create a shared understanding of what kinds of content are welcome,
+        what should stay off-screen, and what should stay out of the game entirely.
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2>What Are Lines and Veils?</h2>
+      <p class="tagline">Clear boundaries help everyone stay in the game.</p>
+
+      <p>
+        Lines and Veils are a simple, effective tool for setting content boundaries before play begins.
+        They give everyone a way to say what should be excluded completely and what can exist in the
+        story only off-screen.
+      </p>
+
+      <div class="two-column">
+        <div class="mini-card">
+          <h3>Lines (The Hard “No”)</h3>
+          <p>
+            A <strong>Line</strong> is a topic, image, or theme that will <strong>not appear in the
+            game at all</strong>. If something is a Line, we do not include it directly, imply it,
+            or use it as background flavor.
+          </p>
+          <p class="note">
+            Example: “Violence against children is a Line for me. I do not want it mentioned or implied.”
+          </p>
+        </div>
+
+        <div class="mini-card">
+          <h3>Veils (Fade to Black)</h3>
+          <p>
+            A <strong>Veil</strong> is a topic that can exist in the story, but the moment it would
+            come on-screen, we <strong>fade to black</strong>. We acknowledge that it happened without
+            roleplaying through it or describing it in detail.
+          </p>
+          <p class="note">
+            Example: “Sexual violence is a Veil. It can exist as part of the world or backstory, but
+            the scene cuts away immediately and is never described.”
+          </p>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Important:</strong> I will use an anonymous process, such as a private message or simple
+        form, to collect everyone’s Lines and Veils <strong>before</strong> we begin character creation.
+        I will then share a group summary focused on the <strong>topics</strong>, not on
+        <strong>who requested them</strong>.
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2>Examples of Topics Players May Want to Flag</h2>
+      <p class="tagline">Prompts to help people think through boundaries.</p>
+
+      <p>
+        Not every player will react the same way to the same material. These examples are here to
+        help people identify possible concerns, not to assume that every topic is automatically off-limits.
+      </p>
+
+      <details>
+        <summary>Common Content & Situational Triggers</summary>
+        <div class="details-content">
+          <div class="topic-category">Physical Violence</div>
+          <ul>
+            <li><strong>Torture</strong>, especially detailed descriptions</li>
+            <li><strong>Graphic or excessive gore</strong> and body horror</li>
+            <li><strong>Dismemberment or amputation</strong></li>
+          </ul>
+
+          <div class="topic-category">Interpersonal Conflict</div>
+          <ul>
+            <li><strong>Non-consensual sexual activity or references</strong></li>
+            <li><strong>Physical, emotional, or verbal abuse</strong></li>
+            <li><strong>Self-harm or suicide</strong>, including references to it</li>
+          </ul>
+
+          <div class="topic-category">Illness & Injury</div>
+          <ul>
+            <li><strong>Sickness or disease</strong>, especially real-world epidemic themes</li>
+            <li><strong>Detailed descriptions of major or permanent injury</strong></li>
+          </ul>
+
+          <div class="topic-category">Mental & Emotional States</div>
+          <ul>
+            <li><strong>Detailed descriptions of intense fear or phobias</strong></li>
+            <li><strong>Mental illness or breakdown</strong>, especially when handled insensitively</li>
+          </ul>
+
+          <div class="topic-category">Death & Loss</div>
+          <ul>
+            <li><strong>Death of children or animals</strong></li>
+            <li><strong>Specific methods of death</strong>, such as drowning, burning, or starvation</li>
+          </ul>
+        </div>
+      </details>
+
+      <details>
+        <summary>Less Common & More Specific Narrative Triggers</summary>
+        <div class="details-content">
+          <div class="topic-category">Substance Use</div>
+          <ul>
+            <li><strong>Drug or alcohol addiction and abuse</strong></li>
+          </ul>
+
+          <div class="topic-category">Socio-Political Themes</div>
+          <ul>
+            <li><strong>Racism, bigotry, or xenophobia</strong> as a plot element</li>
+            <li><strong>Slavery or human trafficking</strong></li>
+            <li><strong>Political or religious persecution</strong>, including witch-hunt themes</li>
+          </ul>
+
+          <div class="topic-category">Environmental Triggers</div>
+          <ul>
+            <li><strong>Claustrophobia or tight spaces</strong></li>
+            <li><strong>Extreme heights or vertigo</strong></li>
+          </ul>
+
+          <div class="topic-category">Body & Autonomy</div>
+          <ul>
+            <li><strong>Body modification or mutation</strong>, especially non-magical versions</li>
+            <li><strong>Mind control or loss of autonomy</strong></li>
+          </ul>
+
+          <div class="topic-category">Specific Scenario Concerns</div>
+          <ul>
+            <li><strong>Betrayal by trusted NPCs or allies</strong></li>
+            <li><strong>Unwinnable scenarios or total party kill (TPK)</strong></li>
+          </ul>
+        </div>
+      </details>
+
+      <details>
+        <summary>Specific Horror & Dark Fantasy Themes</summary>
+        <div class="details-content">
+          <p>
+            My games often include elements of cosmic horror, the macabre, and dark fantasy. What
+            feels fun and spooky to one person can feel overwhelming or genuinely distressing to another,
+            so these themes deserve special attention.
+          </p>
+
+          <div class="topic-category">Cosmic Horror</div>
+          <ul>
+            <li><strong>Existential hopelessness or nihilism</strong></li>
+            <li><strong>Detailed depictions of madness or insanity</strong></li>
+            <li><strong>Loss of memory or identity</strong></li>
+            <li><strong>Unnatural or non-Euclidean geometry/architecture</strong></li>
+          </ul>
+
+          <div class="topic-category">Undead & Gore</div>
+          <ul>
+            <li><strong>Detailed descriptions of rotting or decaying flesh</strong></li>
+            <li><strong>Cannibalism</strong></li>
+            <li><strong>Zombies, ghouls, or skeletons</strong></li>
+          </ul>
+
+          <div class="topic-category">Demonic & Infernal Themes</div>
+          <ul>
+            <li><strong>Possession or exorcism</strong></li>
+            <li><strong>Pacts or deals with evil entities</strong></li>
+            <li><strong>Sacrifice</strong>, especially detailed ritual sacrifice</li>
+          </ul>
+
+          <div class="topic-category">Body Horror</div>
+          <ul>
+            <li><strong>Parasites or infestation</strong></li>
+            <li><strong>Rapid, uncontrollable mutation</strong></li>
+          </ul>
+        </div>
+      </details>
+    </section>
+
+    <section class="section-card">
+      <h2>Safety Tools Beyond Lines and Veils</h2>
+      <p class="tagline">Boundaries are set up front, but safety continues during play.</p>
+
+      <p>
+        Even with clear Lines and Veils, unexpected moments can come up in play. These tools give
+        everyone a simple way to slow down, redirect a scene, or check in without needing to justify
+        themselves in the moment.
+      </p>
+
+      <div class="tool-list">
+        <div class="tool-card">
+          <h3>Pause or Check-In Language</h3>
+          <p>
+            Any player can say something simple like <strong>“Pause”</strong>, <strong>“Can we check in?”</strong>,
+            or <strong>“Can we pull back a bit?”</strong> if a scene is getting too intense. We stop,
+            adjust, and continue without anyone needing to explain more than they want to.
+          </p>
+        </div>
+
+        <div class="tool-card">
+          <h3>The X-Card</h3>
+          <p>
+            The X-Card is a simple signal that says, “This content needs to stop or change.”
+            It can be a literal card on the table, a typed “X” in chat, or any other agreed signal.
+            When it is used, we move on immediately with no debate.
+          </p>
+        </div>
+
+        <div class="tool-card">
+          <h3>Open Door Policy</h3>
+          <p>
+            Anyone can step away from the table for any reason at any time. No one is required to stay
+            in a scene that is upsetting, overwhelming, or simply too much that day.
+          </p>
+        </div>
+
+        <div class="tool-card">
+          <h3>Aftercare and Debrief</h3>
+          <p>
+            After intense sessions, we can take a few minutes to decompress, talk about what worked,
+            and note anything that should be avoided or handled differently in the future.
+          </p>
+        </div>
+      </div>
+
+      <div class="soft-callout">
+        <strong>Bottom line:</strong> safety tools are not interruptions to the game. They are part
+        of how we make the game work for everyone.
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2>How This Works at the Table</h2>
+      <p class="tagline">Safety is ongoing, not one-and-done.</p>
+
+      <ul>
+        <li>We set Lines and Veils before the campaign begins.</li>
+        <li>Anyone can add a new Line or Veil later if something unexpected comes up.</li>
+        <li>If a boundary is crossed, we stop, adjust, and move on without argument or pressure.</li>
+        <li>No one has to explain or defend why a topic is uncomfortable.</li>
+        <li>Respecting boundaries is part of being a good player and a good GM.</li>
+      </ul>
+
+      <p>
+        The goal is not to remove horror, drama, danger, or difficult choices from play. The goal is
+        to make sure those elements stay fictional and fun, rather than becoming real-life distress.
+      </p>
+    </section>
+  </div>
+</body>
+</html>

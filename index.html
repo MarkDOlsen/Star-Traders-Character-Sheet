@@ -15,6 +15,7 @@
       --accent-hover: #0ea5e9;
       --border: #334155;
       --shadow: rgba(0, 0, 0, 0.35);
+      --link-text: #0096FF;
     }
 
     * {
@@ -89,6 +90,10 @@
       letter-spacing: 0.02em;
     }
 
+    .link {
+      color: var(--link-text);
+    }
+    
     .description {
       color: var(--muted);
       margin-bottom: 22px;
@@ -307,7 +312,7 @@
     </section>
 
     <p>Most of my games run off some variation of the Fate Roleplaying Game. Those rules can be found here:</p>
-    <a href="https://fate-srd.com/" target="_blank" rel="noopener noreferrer">Fate System Reference Doc</a>
+    <a class="link" href="https://fate-srd.com/" target="_blank" rel="noopener noreferrer">Fate System Reference Doc</a>
     
 </body>
 </html>

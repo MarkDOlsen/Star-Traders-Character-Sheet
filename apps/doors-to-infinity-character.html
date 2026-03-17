@@ -116,17 +116,17 @@
     <div class="no-print sticky top-0 z-50 bg-white border-b p-4 flex flex-col items-center gap-3 shadow-md">
         <div class="flex justify-center gap-4">
             <button onclick="exportJSON()" class="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition">
-                <i data-lucide="download"></i> Export JSON
+                <i data-lucide="download"></i> Save
             </button>
             <label class="flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700 cursor-pointer transition">
-                <i data-lucide="upload"></i> Import JSON
+                <i data-lucide="upload"></i> Load
                 <input type="file" id="importFile" class="hidden" onchange="importJSON(event)">
             </label>
             <button onclick="generatePDF()" class="flex items-center gap-2 bg-slate-800 text-white px-4 py-2 rounded hover:bg-slate-900 transition">
-                <i data-lucide="file-text"></i> Download PDF
+                <i data-lucide="file-text"></i> PDF
             </button>
             <button onclick="resetForm()" class="flex items-center gap-2 bg-rose-600 text-white px-4 py-2 rounded hover:bg-rose-700 transition">
-                <i data-lucide="trash-2"></i> Clear Form
+                <i data-lucide="trash-2"></i> Reset
             </button>
         </div>
 

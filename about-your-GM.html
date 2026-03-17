@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Your Game Master</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --panel-alt: #1f2937;
+      --text: #f3f4f6;
+      --muted: #cbd5e1;
+      --accent: #38bdf8;
+      --accent-hover: #0ea5e9;
+      --border: #334155;
+      --shadow: rgba(0, 0, 0, 0.35);
+      --soft: rgba(56, 189, 248, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #0b1120 0%, #111827 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 40px 20px 60px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .header-icon {
+      width: 78px;
+      height: 78px;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: radial-gradient(circle at top, rgba(56, 189, 248, 0.22), rgba(15, 23, 42, 0.95));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      box-shadow: 0 10px 24px var(--shadow);
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: 2.5rem;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      margin: 0 auto;
+      max-width: 900px;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .top-links {
+      margin-top: 22px;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 12px 18px;
+      background: var(--accent);
+      color: #082032;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 10px;
+      transition: background 0.2s ease, transform 0.15s ease;
+    }
+
+    .button:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .section-card {
+      background: rgba(17, 24, 39, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px;
+      margin-bottom: 28px;
+      box-shadow: 0 12px 30px var(--shadow);
+    }
+
+    .section-card h2,
+    .sidebar-card h2 {
+      margin-top: 0;
+      margin-bottom: 12px;
+      font-size: 1.9rem;
+    }
+
+    .tagline {
+      margin: 0 0 16px;
+      color: var(--accent);
+      font-size: 1.05rem;
+      font-weight: bold;
+      letter-spacing: 0.02em;
+    }
+
+    .soft-callout {
+      border-left: 4px solid var(--accent);
+      background: var(--soft);
+      padding: 16px 18px;
+      border-radius: 10px;
+      margin-top: 20px;
+      color: var(--muted);
+    }
+
+    .sidebar-card {
+      background: rgba(31, 41, 55, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 12px 30px var(--shadow);
+      position: sticky;
+      top: 20px;
+    }
+
+    .sidebar-card h3 {
+      margin-top: 22px;
+      margin-bottom: 10px;
+      color: var(--accent);
+      font-size: 1.1rem;
+    }
+
+    .sidebar-card h3:first-of-type {
+      margin-top: 0;
+    }
+
+    ul {
+      margin-top: 10px;
+      padding-left: 22px;
+    }
+
+    li {
+      margin-bottom: 10px;
+      color: var(--muted);
+    }
+
+    .compact-list li {
+      margin-bottom: 8px;
+    }
+
+    .lead {
+      font-size: 1.05rem;
+      color: var(--muted);
+    }
+
+    strong {
+      color: var(--text);
+    }
+
+    .SRD-footer{
+      text-align: center;
+      margin-top: 50px;
+    }
+    
+    .link {
+      color: var(--link-text);
+    }
+    
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar-card {
+        position: static;
+      }
+    }
+
+    @media (max-width: 760px) {
+      h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="header-icon" aria-hidden="true">🎲</div>
+      <h1>About Your Game Master</h1>
+      <p class="subtitle">
+        A little about who I am as a GM, the kinds of stories I like to run,
+        and what you can expect when you sit down at my table.
+      </p>
+      <div class="top-links button-row" style="justify-content: center;">
+        <a class="button" href="index.html">Back to Main Page</a>
+      </div>
+    </header>
+
+    <div class="layout">
+      <main>
+        <section class="section-card">
+          <h2>Welcome</h2>
+          <p class="tagline">What kind of game can you expect from me?</p>
+
+          <p class="lead">
+            Welcome! If you’re considering joining one of my campaigns, this page should give you a
+            clear picture of who I am as a Game Master, the kinds of stories I like to tell, and what
+            you can expect when you sit down at my table.
+          </p>
+
+          <p>
+            I have been playing tabletop RPGs since 1979, and over the decades I have played hundreds
+            of systems and run games across a wide range of genres and styles. While I have worn many
+            hats over the years—Dungeon Master, Referee, Storyteller, and more—I prefer the term
+            <strong>Game Master</strong>. My goal is to use that experience to help create a smooth,
+            immersive, and exciting experience for everyone involved.
+          </p>
+
+          <div class="soft-callout">
+            <strong>In short:</strong> I aim to run games that are atmospheric, player-driven,
+            dramatic, and challenging, while still being fair, collaborative, and fun.
+          </div>
+        </section>
+
+        <section class="section-card">
+          <h2>Tone & Atmosphere</h2>
+          <p class="tagline">Pulp sword & sorcery, mystery, menace, and adventure.</p>
+
+          <p>
+            While I run many genres, my baseline approach is rooted in classic fantasy. I am heavily
+            inspired by old-school <strong>sword and sorcery</strong> pulp stories—think
+            <strong>Conan the Barbarian</strong>, <strong>Elric of Melniboné</strong>, and
+            <strong>Fafhrd and the Gray Mouser</strong>—mixed with the epic strangeness of
+            <strong>The Lord of the Rings</strong> and <strong>The Book of the New Sun</strong>.
+          </p>
+
+          <ul>
+            <li>
+              <strong>Mystery and Menace:</strong> I like worlds filled with ancient ruins, strange
+              powers, half-lost histories, and a constant sense that civilization is holding back
+              something older, darker, or less understandable.
+            </li>
+            <li>
+              <strong>Cinematic Horror:</strong> My settings often include Lovecraftian elements,
+              eerie imagery, and vivid descriptions of danger and violence. I enjoy atmosphere and
+              tension, but I generally stop short of full grimdark hopelessness.
+            </li>
+            <li>
+              <strong>Pulp Action:</strong> I favor the Rule of Cool, but I like it grounded in the
+              logic of the setting. I want dramatic swashbuckling action, desperate escapes, and
+              memorable heroic risks that still feel believable within the world.
+            </li>
+          </ul>
+        </section>
+
+        <section class="section-card">
+          <h2>My GMing Style</h2>
+          <p class="tagline">Emergent storytelling over pre-written plot.</p>
+
+          <p>
+            I do not think of myself as an author writing a novel for the players to perform. I think
+            of myself as a facilitator presenting a world, its dangers, and its opportunities, and
+            then responding honestly to what the players choose to do.
+          </p>
+
+          <ul>
+            <li>
+              <strong>Sandbox Agency:</strong> I do not like railroads or heavily scripted plotlines.
+              I prefer open-ended campaigns built around factions, rumors, opportunities, and
+              complications that the players choose to pursue.
+            </li>
+            <li>
+              <strong>The World Is Alive:</strong> I rarely plan more than a session or two ahead.
+              The setting exists beyond the player characters, and events may evolve, worsen, or
+              resolve based on your choices—or your inaction.
+            </li>
+            <li>
+              <strong>Logical Challenge:</strong> Challenges are based on the internal logic of the
+              world, not on a carefully curated “balanced encounter” model. I try to telegraph danger
+              clearly, but sometimes the smartest choice really is to retreat.
+            </li>
+          </ul>
+        </section>
+
+        <section class="section-card">
+          <h2>Rules & Rulings</h2>
+          <p class="tagline">Flexible systems, quick decisions, and creative problem-solving.</p>
+
+          <p>
+            I tend to prefer flexible, rules-light systems—especially <strong>Fate</strong>—because
+            they support improvisation, collaboration, and character-driven play.
+          </p>
+
+          <ul>
+            <li>
+              <strong>Rulings Over Rules:</strong> If an unusual situation comes up that is not
+              clearly covered by the rules, I will make a common-sense ruling and keep the game
+              moving. I care more about fairness, consistency, and momentum than strict page-flipping.
+            </li>
+            <li>
+              <strong>Theater of the Mind:</strong> I usually run scenes and combat through verbal
+              description rather than battlemats and miniatures. I care more about relative position,
+              intent, and momentum than exact square counting.
+            </li>
+            <li>
+              <strong>Player Ingenuity:</strong> If you come up with a clever approach that is not
+              written on your character sheet, I want to hear it. Creative play is one of my favorite
+              parts of the hobby.
+            </li>
+          </ul>
+        </section>
+
+        <section class="section-card">
+          <h2>Your Role as a Player</h2>
+          <p class="tagline">Proactive characters, collaborative play, and shared momentum.</p>
+
+          <ul>
+            <li>
+              <strong>The Pulp Hero:</strong> I look for characters who are larger-than-life
+              adventurers with personal goals, strong motivations, and a reason to engage with danger.
+              They do not need to be saints or world-savers, but they should not be villains either.
+            </li>
+            <li>
+              <strong>Roleplaying, Not Performing:</strong> I love immersion, but I do not require
+              accents, in-character monologues, or theatrical performance. First-person roleplay is
+              welcome, but third-person description is just as welcome.
+            </li>
+            <li>
+              <strong>The Group Comes First:</strong> I strongly discourage power-building for its own
+              sake. Build the character you want to play, and I will build adventures that give that
+              character interesting things to do. Most importantly, your character must be willing to
+              work with the party. I have a zero-tolerance policy for PvP conflict.
+            </li>
+            <li>
+              <strong>Metagaming:</strong> I expect us to interact like adults. If you learn
+              something at the table that your character does not know, I trust you to play honestly.
+              I generally lean in the players’ favor, but I do not want out-of-game assumptions to
+              replace in-game judgment.
+            </li>
+          </ul>
+        </section>
+
+        <section class="section-card">
+          <h2>Safety and Comfort</h2>
+          <p class="tagline">Dark themes, clear boundaries, and a table built on trust.</p>
+
+          <p>
+            Because my games often include elements of cosmic horror, graphic violence, and macabre
+            imagery, I prioritize player safety. I use <strong>Lines and Veils</strong> and related
+            safety tools to make sure we can explore dark themes without crossing personal boundaries.
+          </p>
+
+          <p>
+            If something becomes too intense or uncomfortable, we pause, adjust, and move forward.
+            My goal is for the game to be thrilling, immersive, and challenging—but always fun and
+            respectful for everyone involved.
+          </p>
+        </section>
+
+        
+        <!-- Footer link to Fate SRD docs -->
+        <p class="SRD-footer">
+          Most of my games run off some variation of the Fate Roleplaying Game. Those rules can be found here: <a class="link" href="https://fate-srd.com/" target="_blank" rel="noopener noreferrer">Fate System Reference Doc</a>
+        </p>
+        
+      </main>
+
+      <aside>
+        <div class="sidebar-card">
+          <h2>My Gaming History</h2>
+          <p class="tagline">Decades in the hobby, across a lot of different systems.</p>
+
+          <p>
+            I have been playing tabletop RPGs for a long time and have most often been the
+            <strong>Dungeon Master</strong>, <strong>Referee</strong>, <strong>Storyteller</strong>,
+            or <strong>Game Master</strong>—which is the term I prefer.
+          </p>
+
+          <p>
+            I started back in 1979 with the <strong>Dungeons & Dragons Basic Set (BX)</strong>,
+            although <strong>Gamma World</strong> was technically the first game I ever played.
+            In the early 1980s I moved into <strong>BECMI D&D</strong>, mixed with
+            <strong>Advanced Dungeons & Dragons</strong>, and those early years of just figuring
+            things out with no one to explain them to us are a big part of what made me love the hobby.
+          </p>
+
+          <h3>Games I’ve Played the Longest</h3>
+          <ul class="compact-list">
+            <li>D&amp;D (BX and BECMI)</li>
+            <li>Advanced Dungeons &amp; Dragons (1st Edition, 3rd Edition, and 3.5)</li>
+            <li>Rolemaster</li>
+            <li>GURPS</li>
+            <li>HERO</li>
+            <li>Fate</li>
+          </ul>
+
+          <h3>Favorites I Haven’t Run Nearly Enough</h3>
+          <ul class="compact-list">
+            <li>Amber Diceless</li>
+            <li>Barbarians of Lemuria</li>
+            <li>Earthdawn</li>
+            <li>Lords of Gossamer and Shadow Diceless</li>
+            <li>Mutants &amp; Masterminds (2nd Edition only!)</li>
+            <li>Traveller (the old boxed set)</li>
+          </ul>
+
+          <h3>Other Games I’ve Played or Run More Than Once</h3>
+          <ul class="compact-list">
+            <li>7th Sea</li>
+            <li>13th Age</li>
+            <li>Basic Fantasy RPG</li>
+            <li>Basic Roleplaying</li>
+            <li>Call of Cthulhu</li>
+            <li>Conan (various publishers)</li>
+            <li>Cypher</li>
+            <li>Delta Green</li>
+            <li>Elric</li>
+            <li>Exalted (2nd and 3rd Editions)</li>
+            <li>Gamma World (1st Edition)</li>
+            <li>Gumshoe</li>
+            <li>The Marvel Roleplaying Game</li>
+            <li>Mage: The Ascension</li>
+            <li>Monster of the Week</li>
+            <li>Mothership</li>
+            <li>Nightlife</li>
+            <li>Pathfinder (1st Edition)</li>
+            <li>Savage Worlds</li>
+            <li>Scion</li>
+            <li>Star Frontiers</li>
+            <li>Starfinder</li>
+            <li>Stormbringer</li>
+            <li>Unknown Armies</li>
+            <li>Vampire: The Requiem</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</body>
+</html>
+
+

@@ -93,10 +93,27 @@
         .condition-label { font-size: 0.8rem; font-weight: 700; color: #1e293b; }
         .condition-desc { font-size: 0.7rem; color: #64748b; font-weight: 400; }
 
+        /* added to try and fix image squashing on print to PDF */
         #profile-img {
-          object-fit: cover;
-          object-position: center;
+          width: 100% !important;
+          height: 100% !important;
+          object-fit: cover !important;
+          object-position: center !important;
+          display: block !important;
         }
+        
+        .pdf-mode #profile-img,
+        @media print {
+          #profile-img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+            object-position: center !important;
+            display: block !important;
+          }
+        }
+        /* end of PDF image fix */
+
         
         /* Print-specific overrides */
         @media print { 

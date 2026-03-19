@@ -156,7 +156,7 @@
         <div id="editor-toolbar" class="flex items-center gap-2 bg-slate-800 p-1 rounded border border-slate-600">
             <button onclick="execCmd('bold')" class="p-1 hover:bg-slate-700 rounded text-slate-200" title="Bold"><i data-lucide="bold" class="w-4 h-4"></i></button>
             <button onclick="execCmd('italic')" class="p-1 hover:bg-slate-700 rounded text-slate-200" title="Italic"><i data-lucide="italic" class="w-4 h-4"></i></button>
-            <button onclick="execCmd('insertUnorderedList')" class=""p-1 hover:bg-slate-700 rounded text-slate-200" title="Bullet List"><i data-lucide="list" class="w-4 h-4"></i></button>
+            <button onclick="execCmd('insertUnorderedList')" class="p-1 hover:bg-slate-700 rounded text-slate-200" title="Bullet List"><i data-lucide="list" class="w-4 h-4"></i></button>
             <button onclick="execCmd('removeFormat')" class="p-1 hover:bg-slate-700 rounded text-slate-200" title="Clear Formatting"><i data-lucide="eraser" class="w-4 h-4"></i></button>
         </div>
     </div>
@@ -167,7 +167,7 @@
         <!-- PAGE 1: CORE STATS -->
         <div class="sheet-container rounded-sm">
             <!-- HEADER SECTION -->
-            <div class="flex justify-between items-start border-b-2 border-slate-900 pb-4 mb-4">
+            <div class="flex justify-between items-start pb-4 mb-4">
                 <div class="w-2/3">
                     <h1 class="header-font text-3xl text-slate-900 mb-4 tracking-tighter">The Doors to Infinity</h1>
                     <div class="space-y-3">
@@ -256,28 +256,28 @@
 
                     <div class="space-y-4">
                         <div>
-                            <div class="condition-label">Wounded <span class="condition-desc">â€” lasting; 4 shifts</span></div>
+                            <div class="condition-label">Wounded <span class="condition-desc">Ã¢â‚¬â€ lasting; 4 shifts</span></div>
                             <div class="flex items-center gap-2 mt-1">
                                 <input type="checkbox" class="checkbox-custom shrink-0" id="wounded">
                                 <input type="text" id="woundedNotes" class="text-[10px] italic w-full" placeholder="Specify...">
                             </div>
                         </div>
                         <div>
-                            <div class="condition-label">In Peril <span class="condition-desc">â€” sticky; 4 shifts</span></div>
+                            <div class="condition-label">In Peril <span class="condition-desc">Ã¢â‚¬â€ sticky; 4 shifts</span></div>
                             <div class="flex items-center gap-2 mt-1">
                                 <input type="checkbox" class="checkbox-custom shrink-0" id="inperil">
                                 <input type="text" id="inperilNotes" class="text-[10px] italic w-full" placeholder="Specify...">
                             </div>
                         </div>
                         <div>
-                            <div class="condition-label">Doomed <span class="condition-desc">â€” lasting; 6 shifts</span></div>
+                            <div class="condition-label">Doomed <span class="condition-desc">Ã¢â‚¬â€ lasting; 6 shifts</span></div>
                             <div class="flex items-center gap-2 mt-1">
                                 <input type="checkbox" class="checkbox-custom shrink-0" id="doomed">
                                 <input type="text" id="doomedNotes" class="text-[10px] italic w-full" placeholder="Specify...">
                             </div>
                         </div>
                         <div>
-                            <div class="condition-label">Indebted <span class="condition-desc">â€” Favors</span></div>
+                            <div class="condition-label">Indebted <span class="condition-desc">Ã¢â‚¬â€ Favors</span></div>
                             <div class="flex flex-col gap-2 mt-1">
                                 <div class="flex gap-1">
                                     <input type="checkbox" class="checkbox-custom" id="debt1">
@@ -293,27 +293,59 @@
                 </div>
             </div>
 
-            <!-- POWERS & STUNTS -->
-            <div class="mt-6">
-                <h2 class="header-font text-lg border-b border-slate-300 text-indigo-900 mb-2">Powers & Stunts</h2>
-                <div id="powersStunts" contenteditable="true" class="rich-editor text-[13px] leading-snug h-[180px]" onfocus="showToolbar()" onblur="hideToolbar()"></div>
+            <!-- ICONIC DESCRIPTION -->
+            <div class="mt-3">
+                <h2 class="header-font text-lg border-b border-slate-300 text-indigo-900 mb-2">Iconic Description</h2>
+                <div id="iconicDescription" contenteditable="true" class="rich-editor text-[13px] leading-snug h-[180px]" onfocus="showToolbar()" onblur="hideToolbar()"></div>
             </div>
         </div>
 
-        <!-- PAGE 2: DOSSIER -->
+        <!-- PAGE 2: POWERS & STUNTS -->
         <div class="sheet-container rounded-sm">
-            <div class="flex justify-between items-center border-b-2 border-slate-900 pb-3 mb-6">
-                <h1 class="header-font text-2xl text-slate-900 tracking-tighter">Warden Dossier</h1>
-                <div class="text-[10px] font-bold text-slate-400 uppercase">Supplemental Data</div>
+            <div class="flex justify-between items-center border-b-0 border-slate-900 pb-3 mb-6">
+               <!-- <h1 class="header-font text-2xl text-slate-900 tracking-tighter">Warden Dossier</h1>
+                <div class="text-[10px] font-bold text-slate-400 uppercase">Supplemental Data</div> -->
             </div>
 
             <div class="space-y-6">
-                <!-- Appearance and Backstory -->
+                <!-- Powers -->
                 <div>
                     <h2 class="header-font text-lg border-b border-slate-300 text-indigo-900 mb-2 flex items-center gap-2">
-                        <i data-lucide="user" class="w-4 h-4"></i> Appearance & Background
+                        <i data-lucide="sparkles" class="w-4 h-4"></i> Powers
                     </h2>
-                    <div id="charDescription" contenteditable="true" class="rich-editor text-sm leading-relaxed h-[300px]" onfocus="showToolbar()" onblur="hideToolbar()"></div>
+                    <div id="powers" contenteditable="true" class="rich-editor text-sm leading-relaxed h-[360px]" onfocus="showToolbar()" onblur="hideToolbar()"></div>
+                </div>
+
+                <!-- Stunts -->
+                <div>
+                    <h2 class="header-font text-lg border-b border-slate-300 text-indigo-900 mb-2 flex items-center gap-2">
+                        <i data-lucide="zap" class="w-4 h-4"></i> Stunts
+                    </h2>
+                    <div id="stunts" contenteditable="true" class="rich-editor text-sm leading-relaxed h-[360px]" onfocus="showToolbar()" onblur="hideToolbar()"></div>
+                </div>
+            </div>
+
+            <!-- FOOTER INFO -->
+            <div class="absolute bottom-8 left-10 right-10 flex justify-between items-center text-[9px] text-slate-400 border-t pt-3">
+                <div class="uppercase font-bold tracking-widest">The Doors to Infinity</div>
+                <div>Fate Accelerated / Gossamer & Shadow Variant</div>
+            </div>
+        </div>
+
+        <!-- PAGE 3: HISTORY & CAMPAIGN NOTES -->
+        <div class="sheet-container rounded-sm">
+            <div class="flex justify-between items-center border-b-0 border-slate-900 pb-3 mb-6">
+               <!-- <h1 class="header-font text-2xl text-slate-900 tracking-tighter">Warden Archive</h1>
+                <div class="text-[10px] font-bold text-slate-400 uppercase">History & Notes</div> -->
+            </div>
+
+            <div class="space-y-6">
+                <!-- History -->
+                <div>
+                    <h2 class="header-font text-lg border-b border-slate-300 text-indigo-900 mb-2 flex items-center gap-2">
+                        <i data-lucide="scroll-text" class="w-4 h-4"></i> History
+                    </h2>
+                    <div id="history" contenteditable="true" class="rich-editor text-sm leading-relaxed h-[300px]" onfocus="showToolbar()" onblur="hideToolbar()"></div>
                 </div>
 
                 <!-- Campaign Notes -->
@@ -321,7 +353,7 @@
                     <h2 class="header-font text-lg border-b border-slate-300 text-indigo-900 mb-2 flex items-center gap-2">
                         <i data-lucide="book-open" class="w-4 h-4"></i> Campaign Notes
                     </h2>
-                    <div id="campaignNotes" contenteditable="true" class="rich-editor text-sm leading-relaxed h-[480px]" onfocus="showToolbar()" onblur="hideToolbar()"></div>
+                    <div id="campaignNotes" contenteditable="true" class="rich-editor text-sm leading-relaxed h-[420px]" onfocus="showToolbar()" onblur="hideToolbar()"></div>
                 </div>
             </div>
 
@@ -465,6 +497,10 @@
             reader.onload = e => {
                 try {
                     const data = JSON.parse(e.target.result);
+
+                    if (!("iconicDescription" in data) && "powersStunts" in data) data.iconicDescription = data.powersStunts;
+                    if (!("powers" in data) && "charDescription" in data) data.powers = data.charDescription;
+                    if (!("stunts" in data) && "campaignNotes" in data) data.stunts = data.campaignNotes;
 
                     getSavableFields().forEach(el => {
                         if (!(el.id in data)) return;

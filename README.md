@@ -1,4 +1,4 @@
-# Tools and Resources  
+# Mark's Tools and Resources  
 
 _For players in my Fate-based TTRPG games_  
   
@@ -8,17 +8,20 @@ _For players in my Fate-based TTRPG games_
   -  Star Traders campaign setting
   -  The Doors to Infinity campaign setting
 - Additional Tracking Sheets  
-  -  Star Traders Ship Record Sheet
+  -  Star Traders Ship Record Sheet  
 - Campaign pitches for past/future campaigns  
 - Player safety tools and guideleines  
 - My history with and outlook on TTRPGs  
   
 ### In Progress
-- Full Doors to Infinity campaign/setting player introduction document  
+- Doors to Infinity campaign/setting player introduction document  
+- Star Traders Campaign Log  
   
 #### TO DO  
-1. Rename the repo to something like "Mark's Fate TTRPG Tools"
-2. Additional trackers and tools  
+1. Rename the repo to something like "Mark's Fate TTRPG Tools"  
+2. Fix spelling, grammar, missing parenthesis, etc.
+3. Lines and Veils submission form  
+4. Additional trackers and tools  
   
   
 ---  

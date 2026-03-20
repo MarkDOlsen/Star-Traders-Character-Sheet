@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Campaign Log</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --panel-alt: #1f2937;
+      --text: #f3f4f6;
+      --muted: #cbd5e1;
+      --accent: #38bdf8;
+      --accent-hover: #0ea5e9;
+      --border: #334155;
+      --shadow: rgba(0, 0, 0, 0.35);
+      --soft: rgba(56, 189, 248, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #0b1120 0%, #111827 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 40px 20px 60px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .header-icon {
+      width: 78px;
+      height: 78px;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: radial-gradient(circle at top, rgba(56, 189, 248, 0.22), rgba(15, 23, 42, 0.95));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      box-shadow: 0 10px 24px var(--shadow);
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: 2.5rem;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      margin: 0 auto;
+      max-width: 900px;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .top-links {
+      margin-top: 22px;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 12px 18px;
+      background: var(--accent);
+      color: #082032;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 10px;
+      transition: background 0.2s ease, transform 0.15s ease;
+    }
+
+    .button:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+
+    .section-card {
+      background: rgba(17, 24, 39, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px;
+      margin-bottom: 28px;
+      box-shadow: 0 12px 30px var(--shadow);
+    }
+
+    .section-card h2 {
+      margin-top: 0;
+      margin-bottom: 12px;
+      font-size: 1.9rem;
+    }
+
+    .tagline {
+      margin: 0 0 16px;
+      color: var(--accent);
+      font-size: 1.05rem;
+      font-weight: bold;
+      letter-spacing: 0.02em;
+    }
+
+    details {
+      background: rgba(31, 41, 55, 0.88);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin-top: 18px;
+      overflow: hidden;
+    }
+
+    summary {
+      cursor: pointer;
+      list-style: none;
+      padding: 18px 20px;
+      font-weight: bold;
+      color: var(--text);
+      background: rgba(15, 23, 42, 0.5);
+    }
+
+    summary:hover {
+      background: rgba(15, 23, 42, 0.75);
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .season-summary {
+      font-size: 1.2rem;
+      color: var(--accent);
+    }
+
+    .details-content {
+      padding: 18px 20px 20px;
+    }
+
+    .nested-details {
+      margin-top: 14px;
+      background: rgba(15, 23, 42, 0.55);
+    }
+
+    .adventure-summary {
+      font-size: 1.05rem;
+      color: var(--text);
+    }
+
+    .meta-section {
+      margin-top: 18px;
+      padding: 16px 18px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--soft);
+    }
+
+    .meta-section h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      color: var(--accent);
+      font-size: 1.1rem;
+    }
+
+    .meta-section ul {
+      margin-bottom: 0;
+    }
+
+    ul {
+      margin-top: 10px;
+      padding-left: 22px;
+    }
+
+    li {
+      margin-bottom: 10px;
+      color: var(--muted);
+    }
+
+    p {
+      color: var(--muted);
+    }
+
+    strong {
+      color: var(--text);
+    }
+
+    .coming-soon {
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    @media (max-width: 760px) {
+      h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="header-icon" aria-hidden="true">📖</div>
+      <h1>Campaign Log</h1>
+      <p class="subtitle">
+        A running record of season arcs, adventures, and key details from the campaign.
+      </p>
+      <div class="top-links button-row">
+        <a class="button" href="index.html">Back to Main Page</a>
+      </div>
+    </header>
+
+    <section class="section-card">
+      <h2>Star Traders Campaign 1 Log</h2>
+
+      <details>
+        <summary><span class="season-summary">Season 1: The Quest for Janedhoe</span></summary>
+        <div class="details-content">
+
+          <details class="nested-details">
+            <summary><span class="adventure-summary">01-01: The Smugglers of the Savage Void</span></summary>
+            <div class="details-content">
+              <p>
+                The PCs are hired to transport <strong>a mysterious cargo</strong> across a rough frontier
+                sector, but nothing goes as planned. Ambushed by pirates, they are forced to land on a
+                <strong>savage, barely charted planet</strong> for repairs. There they encounter strange alien
+                inhabitants who hold the key to getting their ship spaceworthy again - <strong>for a price</strong>.
+                Once back in the void, the danger is not over: at their destination, <strong>a rival faction will
+                stop at nothing to ensure the delivery never happens</strong>.
+              </p>
+
+              <div class="meta-section">
+                <h3>Air Date</h3>
+                <p class="coming-soon">Add session date here.</p>
+              </div>
+
+              <div class="meta-section">
+                <h3>Clues Found</h3>
+                <ul>
+                  <li class="coming-soon">Add clues discovered during this adventure.</li>
+                </ul>
+              </div>
+
+              <div class="meta-section">
+                <h3>Mysteries</h3>
+                <ul>
+                  <li class="coming-soon">Add unresolved questions or ongoing mysteries here.</li>
+                </ul>
+              </div>
+
+              <div class="meta-section">
+                <h3>Locations</h3>
+                <ul>
+                  <li><strong>Harlan's Rest</strong>  -  A rowdy spaceport on the Fringe world of Kordath Prime.</li>
+                  <li><strong>Grelak-4</strong>  -  A corporate-controlled industrial moon.</li>
+                  <li><strong>The Breach Lock</strong>  -  A grimy, low-lit bar wedged between two docking hangars, frequented by transient freighter crews, smugglers, contract pilots, and burned-out haulers looking for their last drink, deal, or brawl before shipping out.</li>
+                </ul>
+              </div>
+
+              <div class="meta-section">
+                <h3>NPCs</h3>
+                <ul>
+                  <li><strong>Zzzkael</strong>  -  The client. Codename Veilshard, a Sladrallan diplomatic envoy.</li>
+                  <li><strong>Marshall Rakkor</strong>  -  The law in Harlan's Rest. A rough-and-tumble Hacragorkan enforcer of frontier “justice,” usually in the pocket of a local syndicate or corporate interest.</li>
+                  <li><strong>Deputy Jelshi Taarn</strong>  -  Rakkor's deputy in Harlan's Rest. She seems genuinely tired of the corruption but lacks either the courage or the evidence to openly move against it.</li>
+                  <li><strong>Dockmaster Gravik Molt</strong>  -  A Ken Reeg dockmaster in Grelak-4's lower bays. Always in a hurry, always willing to overlook a problem for the right fee.</li>
+                  <li><strong>Commander Helvara Senn</strong>  -  The receiver of Zzzkael's shipment. A Templari military liaison currently “advising” Grelak-4's port security.</li>
+                  <li><strong>Fizzik</strong>  -  A fluffy, big-eyed Urseminiute working with Helvara Senn who keeps offering people candy in a very disturbing way.</li>
+                </ul>
+              </div>
+            </div>
+          </details>
+
+          <details class="nested-details">
+            <summary><span class="adventure-summary">01-02: The Apex Spire Heist</span></summary>
+            <div class="details-content">
+              <p>
+                Looking for extra cash, the PCs are connected to <strong>Veln Corros</strong>, a buttoned-up corporate
+                auditor who has discovered that his department's internal audits were covering up
+                <strong>illegal research and smuggling operations</strong> involving the Obsidian Cartel and
+                <strong>xeno-tech trafficking</strong>. He offers restricted information in exchange for help extracting
+                a data vault from the Spire and faking his own death.
+              </p>
+
+              <div class="meta-section">
+                <h3>Air Date</h3>
+                <p class="coming-soon">Add session date here.</p>
+              </div>
+
+              <div class="meta-section">
+                <h3>Clues Found</h3>
+                <ul>
+                  <li class="coming-soon">Add clues discovered during this adventure.</li>
+                </ul>
+              </div>
+
+              <div class="meta-section">
+                <h3>Mysteries</h3>
+                <ul>
+                  <li class="coming-soon">Add unresolved questions or ongoing mysteries here.</li>
+                </ul>
+              </div>
+
+              <div class="meta-section">
+                <h3>Locations</h3>
+                <ul>
+                  <li><strong>Grelak-4</strong>  -  A corporate-controlled industrial moon.</li>
+                  <li><strong>The Breach Lock</strong>  -  The same grimy spacer bar between the docking hangars, a reliable source of jobs, rumors, and trouble.</li>
+                  <li><strong>The Grelak Apex Spire</strong>  -  The towering central headquarters of a galaxy-spanning corporation.</li>
+                </ul>
+              </div>
+
+              <div class="meta-section">
+                <h3>NPCs</h3>
+                <ul>
+                  <li><strong>Veln Corros</strong>  -  A paranoid but principled corporate auditor caught between whistleblowing and survival.</li>
+                  <li><strong>Ylioth</strong>  -  A Dolomé ship's engineer who introduces the PCs to Veln Corros.</li>
+                  <li><strong>Halfburn</strong>  -  A malfunctioning decommissioned combat droid.</li>
+                </ul>
+              </div>
+            </div>
+          </details>
+
+          <details class="nested-details">
+            <summary><span class="adventure-summary">01-03: A Planet Out of Time</span></summary>
+            <div class="details-content">
+              <p>
+                Following information Veln Corros pulled from the Spire's systems, the PCs travel to
+                <strong>Xyros-6</strong> to investigate the last known vector of <strong>The Transgressor</strong>,
+                the ship they have learned the missing Jane Dhoe was traveling on. There they discover a world where
+                time seems to loop and overlap, along with a strange structure that may be the source of the temporal
+                anomalies - or at least the source of even deeper mysteries.
+              </p>
+
+              <div class="meta-section">
+                <h3>Air Date</h3>
+                <p class="coming-soon">Add session date here.</p>
+              </div>
+
+              <div class="meta-section">
+                <h3>Clues Found</h3>
+                <ul>
+                  <li class="coming-soon">Add clues discovered during this adventure.</li>
+                </ul>
+              </div>
+
+              <div class="meta-section">
+                <h3>Mysteries</h3>
+                <ul>
+                  <li class="coming-soon">Add unresolved questions or ongoing mysteries here.</li>
+                </ul>
+              </div>
+
+              <div class="meta-section">
+                <h3>Locations</h3>
+                <ul>
+                  <li><strong>Xyros-6</strong>  -  An unmapped jungle world whose only note in the Galactic Database, from a long-defunct planetary survey group, reads: “cleared anomaly site.”</li>
+                </ul>
+              </div>
+
+              <div class="meta-section">
+                <h3>NPCs</h3>
+                <ul>
+                  <li><strong>The Sky-Seekers of Xyros-6</strong>  -  An enigmatic alien people with limited technology but deep knowledge of their homeworld and its secrets.</li>
+                  <li><strong>Zhora Khaal</strong>  -  Captain of <em>The Bloodfang</em>, the Void Marauder pirate ship that tangled with the PCs in <em>The Smugglers of the Savage Void</em>. Feared across the outer systems for her ruthlessness, cunning, and brutal survival instinct. Once a pirate under the Obsidian Cartel, she broke away, stole the <em>Bloodfang</em> in mutiny, and survived six assassination attempts in a single solar year.</li>
+                </ul>
+              </div>
+            </div>
+          </details>
+
+          <details class="nested-details">
+            <summary><span class="adventure-summary">01-04: Pirates of the Crimson Star</span></summary>
+            <div class="details-content">
+              <p>
+                Using Jane Dhoe's journal and the ancient star map found on Xyros-6, the PCs continue
+                tracing the path of the missing Dolomé scientist. Their search now leads them to
+                <strong>The Cove</strong>, hidden base of the feared Crimson Pirates.
+              </p>
+
+              <div class="meta-section">
+                <h3>Air Date</h3>
+                <p class="coming-soon">Add session date here.</p>
+              </div>
+
+              <div class="meta-section">
+                <h3>Clues Found</h3>
+                <ul>
+                  <li class="coming-soon">Add clues discovered during this adventure.</li>
+                </ul>
+              </div>
+
+              <div class="meta-section">
+                <h3>Mysteries</h3>
+                <ul>
+                  <li class="coming-soon">Add unresolved questions or ongoing mysteries here.</li>
+                </ul>
+              </div>
+
+              <div class="meta-section">
+                <h3>Locations</h3>
+                <ul>
+                  <li><strong>The Cove</strong>  -  Hidden in the Drosven System, a dark and gravitationally warped region near the edge of the Fringe. The system is threaded with unstable wormholes - both natural and artificial - held in place by alien latticework and pirate-installed control nodes. Dark, cold, and lit by gravitic lensing and blue ion trails, it serves as the hub of the Crimson Pirates' ghost-lane network. A wrong calculation can mean lost ships, torn hulls, or vanished crews.</li>
+                </ul>
+              </div>
+
+              <div class="meta-section">
+                <h3>NPCs</h3>
+                <ul>
+                  <li><strong>Redmother Vahira</strong>  -  One of the three leaders of the Crimson Pirates, a Sladrallan mystic and keeper of the pirates' wormhole lore.</li>
+                  <li><strong>High Captain Luro Thresk</strong>  -  The pirates' military leader, a brutal and disciplined Hacragorkan loyal only to pirate survival.</li>
+                  <li><strong>Sol Vex</strong>  -  A Ken Reeg negotiator, trader, and handler for the pirates. Silver-tongued, sleazy, and too ambitious for his own good.</li>
+                  <li><strong>Threx Vorga</strong>  -  A noble hunter and self-exile from Augustus's homeworld who now works as an enforcer and bounty hunter for the pirates. She seems to have a garbled understanding of why Augustus is so far from home and may know something about his missing brother.</li>
+                </ul>
+              </div>
+            </div>
+          </details>
+
+          <details class="nested-details">
+            <summary><span class="adventure-summary">01-05: The Ghost Beacon Mystery</span></summary>
+            <div class="details-content">
+              <p>
+                Sol Vex agrees to help the PCs continue their search and may serve as a “friendly” contact
+                within the leadership of the Crimson Pirates, but first he wants something from them. One of
+                the pirates' ghost beacon monitoring and research stations has gone offline. Sol is worried
+                about the security of certain information stored there and wants the PCs to investigate and
+                return with a specific data core.
+              </p>
+
+              <div class="meta-section">
+                <h3>Air Date</h3>
+                <p class="coming-soon">Add session date here.</p>
+              </div>
+
+              <div class="meta-section">
+                <h3>Clues Found</h3>
+                <ul>
+                  <li class="coming-soon">Add clues discovered during this adventure.</li>
+                </ul>
+              </div>
+
+              <div class="meta-section">
+                <h3>Mysteries</h3>
+                <ul>
+                  <li class="coming-soon">Add unresolved questions or ongoing mysteries here.</li>
+                </ul>
+              </div>
+
+              <div class="meta-section">
+                <h3>Locations</h3>
+                <ul>
+                  <li><strong>The Ghost Beacon</strong>  -  A silent pirate monitoring and research station now cut off from the network.</li>
+                </ul>
+              </div>
+
+              <div class="meta-section">
+                <h3>NPCs</h3>
+                <ul>
+                  <li><strong>Sol Vex</strong>  -  The client, and one of the three leaders of the Crimson Pirates.</li>
+                  <li><strong>Dr. Sora Kreel</strong>  -  A Ken Reeg medic and xenologist working on the station.</li>
+                  <li><strong>Shen Velos</strong>  -  A systems engineer working on the secret tech base.</li>
+                </ul>
+              </div>
+            </div>
+          </details>
+
+          <details class="nested-details">
+            <summary><span class="adventure-summary">01-06: The Black Echo, Part One</span></summary>
+            <div class="details-content">
+              <p class="coming-soon">Introduction coming soon.</p>
+
+              <div class="meta-section">
+                <h3>Air Date</h3>
+                <p class="coming-soon">Coming soon.</p>
+              </div>
+
+              <div class="meta-section">
+                <h3>Clues Found</h3>
+                <ul>
+                  <li class="coming-soon">Coming soon.</li>
+                </ul>
+              </div>
+
+              <div class="meta-section">
+                <h3>Mysteries</h3>
+                <ul>
+                  <li class="coming-soon">Coming soon.</li>
+                </ul>
+              </div>
+
+              <div class="meta-section">
+                <h3>Locations</h3>
+                <p class="coming-soon">Details coming soon.</p>
+              </div>
+
+              <div class="meta-section">
+                <h3>NPCs</h3>
+                <p class="coming-soon">Details coming soon.</p>
+              </div>
+            </div>
+          </details>
+
+          <details class="nested-details">
+            <summary><span class="adventure-summary">01-07: The Black Echo, Conclusion</span></summary>
+            <div class="details-content">
+              <p class="coming-soon">Introduction coming soon.</p>
+
+              <div class="meta-section">
+                <h3>Air Date</h3>
+                <p class="coming-soon">Coming soon.</p>
+              </div>
+
+              <div class="meta-section">
+                <h3>Clues Found</h3>
+                <ul>
+                  <li class="coming-soon">Coming soon.</li>
+                </ul>
+              </div>
+
+              <div class="meta-section">
+                <h3>Mysteries</h3>
+                <ul>
+                  <li class="coming-soon">Coming soon.</li>
+                </ul>
+              </div>
+
+              <div class="meta-section">
+                <h3>Locations</h3>
+                <p class="coming-soon">Details coming soon.</p>
+              </div>
+
+              <div class="meta-section">
+                <h3>NPCs</h3>
+                <p class="coming-soon">Details coming soon.</p>
+              </div>
+            </div>
+          </details>
+
+        </div>
+      </details>
+
+      <details>
+        <summary><span class="season-summary">Season 2: Memories of Space</span></summary>
+        <div class="details-content">
+          <p>
+            This season may focus on exploring the mysteries of Augustus and Thad's backstories.
+            We'll discuss where the group wants to go during the wrap-up of <em>The Black Echo</em>.
+          </p>
+        </div>
+      </details>
+    </section>
+  </div>
+</body>
+</html>

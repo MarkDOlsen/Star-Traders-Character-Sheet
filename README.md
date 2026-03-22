@@ -19,9 +19,8 @@ _For players in my Fate-based TTRPG games_
   
 #### TO DO  
 1. Rename the repo to something like "Mark's Fate TTRPG Tools"  
-2. Fix spelling, grammar, missing parenthesis, etc.
-3. Lines and Veils submission form  
-4. Additional trackers and tools  
+2. Lines and Veils submission form  
+3. Additional trackers and tools  
   
   
 ---  

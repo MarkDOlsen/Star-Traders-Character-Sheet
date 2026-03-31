@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Star Traders Soundtrack</title>
+  <link rel="icon" type="image/png" href="../favicon.png">
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --panel-alt: #1f2937;
+      --text: #f3f4f6;
+      --muted: #cbd5e1;
+      --accent: #38bdf8;
+      --accent-hover: #0ea5e9;
+      --border: #334155;
+      --shadow: rgba(0, 0, 0, 0.35);
+      --soft: rgba(56, 189, 248, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #0b1120 0%, #111827 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 20px 60px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .header-icon {
+      width: 78px;
+      height: 78px;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: radial-gradient(circle at top, rgba(56, 189, 248, 0.22), rgba(15, 23, 42, 0.95));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      box-shadow: 0 10px 24px var(--shadow);
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: 2.5rem;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      margin: 0 auto;
+      max-width: 820px;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .section-card {
+      background: rgba(17, 24, 39, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px;
+      margin-bottom: 28px;
+      box-shadow: 0 12px 30px var(--shadow);
+    }
+
+    .section-card h2 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      font-size: 1.9rem;
+    }
+
+    .tagline {
+      margin: 0 0 18px;
+      color: var(--accent);
+      font-size: 1.05rem;
+      font-weight: bold;
+      letter-spacing: 0.02em;
+    }
+
+    p {
+      color: var(--muted);
+    }
+
+    .tracks-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 24px;
+    }
+
+    .track-card {
+      background: rgba(15, 23, 42, 0.68);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+    }
+
+    .track-number {
+      display: inline-block;
+      font-size: 0.82rem;
+      font-weight: bold;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .track-title {
+      margin: 0 0 12px;
+      font-size: 1.15rem;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .track-file {
+      margin: 10px 0 0;
+      font-size: 0.9rem;
+      color: var(--muted);
+      word-break: break-word;
+    }
+
+    audio {
+      width: 100%;
+      margin-top: 6px;
+      border-radius: 10px;
+    }
+
+    .notes {
+      margin-top: 18px;
+      padding: 16px 18px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--soft);
+    }
+
+    .notes p {
+      margin: 0;
+    }
+
+    @media (max-width: 800px) {
+      .tracks-grid {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="header-icon" aria-hidden="true">ðŸŽµ</div>
+      <h1>Star Traders Soundtrack</h1>
+      <p class="subtitle">
+        Music selected for Star Traders to help set the tone of the campaign: danger in the void, swagger on the frontier, and the strange wonder of the Fringe.
+      </p>
+    </header>
+
+    <section class="section-card">
+      <h2>Listen to the Campaign Soundtrack</h2>
+      <p class="tagline">Eleven tracks for adventure, tension, heists, and heroes among the stars.</p>
+      <p>
+        Place these MP3 files in your <strong>../music</strong> folder and this page will play them using your browserâ€™s built-in audio controls.
+      </p>
+
+      <div class="tracks-grid">
+        <article class="track-card">
+          <div class="track-number">Track 01</div>
+          <h3 class="track-title">Opening Theme to Star Traders</h3>
+          <audio controls preload="none">
+            <source src="../music/01%20Opening%20Theme%20to%20Star%20Traders.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+          <p class="track-file">01 Opening Theme to Star Traders.mp3</p>
+        </article>
+
+        <article class="track-card">
+          <div class="track-number">Track 02</div>
+          <h3 class="track-title">The Severance</h3>
+          <audio controls preload="none">
+            <source src="../music/02%20The%20Severance.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+          <p class="track-file">02 The Severance.mp3</p>
+        </article>
+
+        <article class="track-card">
+          <div class="track-number">Track 03</div>
+          <h3 class="track-title">Augustus Theme</h3>
+          <audio controls preload="none">
+            <source src="../music/03%20Augustus%20Theme.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+          <p class="track-file">03 Augustus Theme.mp3</p>
+        </article>
+
+        <article class="track-card">
+          <div class="track-number">Track 04</div>
+          <h3 class="track-title">Jahndos Theme</h3>
+          <audio controls preload="none">
+            <source src="../music/04%20Jahndos%20Theme.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+          <p class="track-file">04 Jahndos Theme.mp3</p>
+        </article>
+
+        <article class="track-card">
+          <div class="track-number">Track 05</div>
+          <h3 class="track-title">Thads Theme</h3>
+          <audio controls preload="none">
+            <source src="../music/05%20Thads%20Theme.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+          <p class="track-file">05 Thads Theme.mp3</p>
+        </article>
+
+        <article class="track-card">
+          <div class="track-number">Track 06</div>
+          <h3 class="track-title">T1Ms Theme</h3>
+          <audio controls preload="none">
+            <source src="../music/06%20T1Ms%20Theme.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+          <p class="track-file">06 T1Ms Theme.mp3</p>
+        </article>
+
+        <article class="track-card">
+          <div class="track-number">Track 07</div>
+          <h3 class="track-title">Scooters Theme</h3>
+          <audio controls preload="none">
+            <source src="../music/07%20Scooters%20Theme.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+          <p class="track-file">07 Scooters Theme.mp3</p>
+        </article>
+
+        <article class="track-card">
+          <div class="track-number">Track 08</div>
+          <h3 class="track-title">Galactic Swing Parade</h3>
+          <audio controls preload="none">
+            <source src="../music/08%20Galactic%20Swing%20Parade.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+          <p class="track-file">08 Galactic Swing Parade.mp3</p>
+        </article>
+
+        <article class="track-card">
+          <div class="track-number">Track 09</div>
+          <h3 class="track-title">Galactic Tension</h3>
+          <audio controls preload="none">
+            <source src="../music/09%20Galactic%20Tension.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+          <p class="track-file">09 Galactic Tension.mp3</p>
+        </article>
+
+        <article class="track-card">
+          <div class="track-number">Track 10</div>
+          <h3 class="track-title">The Heist is On</h3>
+          <audio controls preload="none">
+            <source src="../music/10%20The%20Heist%20is%20On.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+          <p class="track-file">10 The Heist is On.mp3</p>
+        </article>
+
+        <article class="track-card">
+          <div class="track-number">Track 11</div>
+          <h3 class="track-title">Closing Theme to Star Traders</h3>
+          <audio controls preload="none">
+            <source src="../music/11%20Closing%20Theme%20to%20Star%20Traders.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+          <p class="track-file">11 Closing Theme to Star Traders.mp3</p>
+        </article>
+      </div>
+
+      <div class="notes">
+        <p><strong>Suggested location:</strong> save this page as <strong>../reference/star-traders-soundtrack.html</strong>. Because it opens from the main index in a separate tab, there is no return button on this page.</p>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
